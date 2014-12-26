@@ -1,11 +1,25 @@
 var win = window;
 var doc = document;
 var jDialog = function (message, callBack) {
+    /**
+     *
+     */
     return new jDialog.fn.init(message, callBack);
 }
-//
+
+/**
+ *
+ * @type {{constructor: Function, init: Function}}
+ */
 jDialog.fn = jDialog.prototype = {
     constructor: jDialog,
+
+    /**
+     *
+     * @param message
+     * @param callBack
+     * @returns {jDialog}
+     */
     init: function (message, callBack) {
 
         if (!message) {
@@ -39,14 +53,18 @@ jDialog.fn = jDialog.prototype = {
 
         // 只存活一个dialog
         // TODO : options.preventHide;
-        if (D.currentDialog) {
-            D.currentDialog.destory();
+        if (jDialog.currentDialog) {
+            jDialog.currentDialog.destory();
         }
-        D.currentDialog = this;
+        jDialog.currentDialog = this;
         return this;
     }
 }
-//
+
+/**
+ *
+ * @returns {*|{}}
+ */
 jDialog.fn.extend = function () {
 
     var target = arguments[0] || {};
@@ -68,5 +86,9 @@ jDialog.fn.extend = function () {
 
     return target;
 }
-//
+
+/**
+ *
+ * @type {{constructor: Function, init: Function}|jDialog.fn|*}
+ */
 jDialog.fn.init.prototype = jDialog.fn;

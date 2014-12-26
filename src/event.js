@@ -1,4 +1,9 @@
 jDialog.fn.extend({
+
+    /**
+     *
+     * @returns {{}}
+     */
     initEventSystem: function () {
         var self = this;
         var ret = {};
