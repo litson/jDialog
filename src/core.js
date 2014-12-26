@@ -3,7 +3,6 @@ var doc = document;
 var jDialog = function (message, callBack) {
     return new jDialog.fn.init(message, callBack);
 }
-
 //
 jDialog.fn = jDialog.prototype = {
     constructor: jDialog,
@@ -47,7 +46,6 @@ jDialog.fn = jDialog.prototype = {
         return this;
     }
 }
-
 //
 jDialog.fn.extend = function () {
 
@@ -70,7 +68,5 @@ jDialog.fn.extend = function () {
 
     return target;
 }
-
 //
 jDialog.fn.init.prototype = jDialog.fn;
-
