@@ -1,7 +1,7 @@
-jDialog
+jDialog -
 ======
 
-#jDialog
+## Guides
 > jDialog是参照jQuery核心原理，摒弃丑陋的 new 关键字，支持像jQuery扩展一样自定义属于你的dialog
 
 ## Usage
@@ -25,3 +25,5 @@ jDialog
 ```
 
 ## API
+
+## Questions?
