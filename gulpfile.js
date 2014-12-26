@@ -1,33 +1,48 @@
 var gulp = require('gulp');
 var watch = require('gulp-watch');
-var concat = require('gulp-concat');
+var concat = require('gulp-concat-util');
 var sourcemaps = require('gulp-sourcemaps');
 
-var jsPath = ['_header.js', 'core.js', 'helper.js', 'event.js', 'operations.js', 'setting.js', '_footer.js'];
+var jsPath = ['core.js', 'helper.js', 'event.js', 'operations.js', 'setting.js'];
 var distPath = './dist/';
 
-function addPrefix(fix, arr) {
+function addPrefixToEachItem(prefix, items) {
+    var i = items.length;
 
-    return;
+    while (i--) {
+        items[i] = prefix + items[i];
+    }
+
+    return items;
 }
+jsPath = addPrefixToEachItem('./src/', jsPath);
 
-gulp.task('concat', function () {
+gulp.task('concat', function() {
+
+    var fileHeader = '\n;(function (window, document) {\n\n';
+    var fileFooter = '\n\n window.jDialog = jDialog;\n})(window, window.document);\n';
 
     gulp.src(jsPath)
         .pipe(sourcemaps.init())
-        .pipe(concat('jDialog.js', {newLine: '\n/*  */\n'}))
+        .pipe(concat('jDialog.js', {
+            process: function(src) {
+                var pathComments = "/* concat from'" + this.path + "' */\n"
+                return pathComments + src.trim();
+            }
+        }))
+        .pipe(concat.header(fileHeader))
+        .pipe(concat.footer(fileFooter))
         .pipe(sourcemaps.write('../maps'))
         .pipe(gulp.dest(distPath));
 
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', function() {
     gulp.src(jsPath)
-        .pipe(watch(jsPath, function () {
+        .pipe(watch(jsPath, function() {
             gulp.start('concat');
         }))
 
 });
-
 
 gulp.task('default', ['concat', 'watch']);

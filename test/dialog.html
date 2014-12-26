@@ -1,42 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>jDialog</title>
-    <link rel="stylesheet" href="http://cdn.staticfile.org/twitter-bootstrap/3.3.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="../src/dialog.css"/>
+    <link rel="stylesheet" href="http://cdn.staticfile.org/twitter-bootstrap/3.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../src/dialog.css" />
 </head>
+
 <body>
 
-<a class="btn btn-primary" href="javascript:;" onclick="testBed('test1')">一个普通的dialog</a>
-<a class="btn btn-primary" href="javascript:;" onclick="testBed('test2')">一个confirm like dialog</a>
-<a class="btn btn-primary" href="javascript:;" onclick="testBed('test3')">一个自定义dialog</a>
+    <a class="btn btn-primary" href="javascript:;" onclick="testBed('test1')">一个普通的dialog</a>
+    <a class="btn btn-primary" href="javascript:;" onclick="testBed('test2')">一个confirm like dialog</a>
+    <a class="btn btn-primary" href="javascript:;" onclick="testBed('test3')">一个自定义dialog</a>
 
-<script src="../src/dialog.js"></script>
-<script>
-
-    var handlerMapping = {
-        test1: function () {
-            jDialog('一个普通的dialog');
-        },
-        test2: function () {
-            jDialog('确定要删除吗？', function () {
-                alert('谢谢！');
-                this.destory();
-            });
-        },
-        test3: function () {
-            jDialog({
-                modal: false,
-                msg: '一个不带模式窗口的dialog'
-            });
+    <script src="../dist/jDialog.js"></script>
+    <script>
+        var handlerMapping = {
+            test1: function() {
+                jDialog('一个普通的dialog');
+            },
+            test2: function() {
+                jDialog('确定要删除吗？', function() {
+                    alert('谢谢！');
+                    this.destory();
+                });
+            },
+            test3: function() {
+                jDialog({
+                    modal: false,
+                    msg: '一个不带模式窗口的dialog'
+                });
+            }
         }
-    }
 
-    function testBed(type) {
-        return handlerMapping[type]();
-    }
-</script>
+            function testBed(type) {
+                return handlerMapping[type]();
+            }
+    </script>
 </body>
+
 </html>

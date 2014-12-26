@@ -1,15 +1,30 @@
-(function (window, document) {
 
-/*  */
+;(function (window, document) {
+
+/* concat from'/Users/litsonzhang/workspace/jDialog/src/core.js' */
 var win = window;
 var doc = document;
-var jDialog = function(message, callBack) {
+var jDialog = function (message, callBack) {
+    /**
+     *
+     */
     return new jDialog.fn.init(message, callBack);
 }
-//
+
+/**
+ *
+ * @type {{constructor: Function, init: Function}}
+ */
 jDialog.fn = jDialog.prototype = {
     constructor: jDialog,
-    init: function(message, callBack) {
+
+    /**
+     *
+     * @param message
+     * @param callBack
+     * @returns {jDialog}
+     */
+    init: function (message, callBack) {
 
         if (!message) {
             return this;
@@ -49,8 +64,12 @@ jDialog.fn = jDialog.prototype = {
         return this;
     }
 }
-//
-jDialog.fn.extend = function() {
+
+/**
+ *
+ * @returns {*|{}}
+ */
+jDialog.fn.extend = function () {
 
     var target = arguments[0] || {};
     var options = arguments[1] || {};
@@ -71,15 +90,29 @@ jDialog.fn.extend = function() {
 
     return target;
 }
-//
+
+/**
+ *
+ * @type {{constructor: Function, init: Function}|jDialog.fn|*}
+ */
 jDialog.fn.init.prototype = jDialog.fn;
-/*  */
+/* concat from'/Users/litsonzhang/workspace/jDialog/src/helper.js' */
 jDialog.fn.extend({
-    //
+
+    /**
+     *
+     * @param fn
+     * @returns {boolean}
+     */
     isFunction: function (fn) {
         return Object.prototype.toString.call(fn) === '[object Function]';
     },
-    //
+
+    /**
+     *
+     * @param obj
+     * @returns {boolean}
+     */
     isPlainObject: function (obj) {
         if (obj === null) {
             return false;
@@ -87,8 +120,13 @@ jDialog.fn.extend({
         return obj.constructor == {}.constructor;
     }
 });
-/*  */
+/* concat from'/Users/litsonzhang/workspace/jDialog/src/event.js' */
 jDialog.fn.extend({
+
+    /**
+     *
+     * @returns {{}}
+     */
     initEventSystem: function () {
         var self = this;
         var ret = {};
@@ -128,9 +166,14 @@ jDialog.fn.extend({
         return ret;
     }
 });
-/*  */
+/* concat from'/Users/litsonzhang/workspace/jDialog/src/operations.js' */
 jDialog.fn.extend({
-    renderDOM: function() {
+
+    /**
+     *
+     * @returns {*}
+     */
+    renderDOM: function () {
         this.wrapper = this._createElement('div', {
             className: 'dialog'
         });
@@ -161,7 +204,12 @@ jDialog.fn.extend({
         doc.body.appendChild(this.wrapper);
         return this;
     },
-    eventRouter: function(event) {
+
+    /**
+     *
+     * @param event
+     */
+    eventRouter: function (event) {
         var target = event.target;
         var actionName = target.getAttribute('data-dialog-action');
         if (!actionName) {
@@ -169,12 +217,25 @@ jDialog.fn.extend({
         }
         this.fireEvent(actionName);
     },
-    _createElement: function(tagName, attrs) {
+
+    /**
+     *
+     * @param tagName
+     * @param attrs
+     * @returns {HTMLElement}
+     * @private
+     */
+    _createElement: function (tagName, attrs) {
         var element = doc.createElement(tagName);
         this.extend(element, attrs);
         return element;
     },
-    getHeader: function() {
+
+    /**
+     *
+     * @returns {HTMLElement|*|header}
+     */
+    getHeader: function () {
         if (!this.header) {
             this.header = this._createElement('div', {
                 className: 'dialog-header'
@@ -182,7 +243,21 @@ jDialog.fn.extend({
         }
         return this.header;
     },
-    getContainer: function() {
+
+    /**
+     *
+     * @returns {*}
+     */
+    hideHeader: function () {
+        this.getHeader().style.display = 'none';
+        return this;
+    },
+
+    /**
+     *
+     * @returns {HTMLElement|*|container}
+     */
+    getContainer: function () {
         if (!this.container) {
             this.container = this._createElement('div', {
                 className: 'dialog-body'
@@ -190,7 +265,12 @@ jDialog.fn.extend({
         }
         return this.container;
     },
-    getFooter: function() {
+
+    /**
+     *
+     * @returns {HTMLElement|*|footer}
+     */
+    getFooter: function () {
         if (!this.footer) {
             this.footer = this._createElement('div', {
                 className: 'dialog-footer'
@@ -198,7 +278,24 @@ jDialog.fn.extend({
         }
         return this.footer;
     },
-    addButton: function(text, actionName, handler) {
+
+    /**
+     *
+     * @returns {*}
+     */
+    hideFooter: function () {
+        this.getFooter().style.display = 'none';
+        return this;
+    },
+
+    /**
+     *
+     * @param text
+     * @param actionName
+     * @param handler
+     * @returns {*}
+     */
+    addButton: function (text, actionName, handler) {
         var element = this._createElement('a', {
             href: 'javascript:;',
             className: 'dialog-btn',
@@ -212,10 +309,21 @@ jDialog.fn.extend({
         this.getFooter().appendChild(element);
         return this;
     },
-    autoHide: function() {
+
+    /**
+     *
+     * @returns {*}
+     */
+    autoHide: function () {
         return this;
     },
-    fireEvent: function(actionName) {
+
+    /**
+     *
+     * @param actionName
+     * @returns {*}
+     */
+    fireEvent: function (actionName) {
         if (this.events.has(actionName)) {
             var actions = this.events.actions[actionName];
             var length = actions.length;
@@ -234,7 +342,12 @@ jDialog.fn.extend({
         }
         return this;
     },
-    destory: function() {
+
+    /**
+     *
+     * @returns {*}
+     */
+    destory: function () {
         if (this.wrapper) {
             doc.body.removeChild(this.wrapper);
         }
@@ -245,33 +358,57 @@ jDialog.fn.extend({
         jDialog.currentDialog = null;
         return this;
     },
-    createModal: function() {
+
+    /**
+     *
+     * @returns {HTMLElement}
+     */
+    createModal: function () {
         var element = this._createElement('div');
         element.style.cssText = ";background:rgba(0,0,0,0.3);width:100%;" + "height:100%;position:fixed;left:0;top:0;z-index:" + (this.currentDOMIndex - 1);
-        element.onclick = function() {
+        element.onclick = function () {
             this.fireEvent('destory');
         }.bind(this);
         doc.body.appendChild(element);
         return element;
     },
-    getModal: function() {
+
+    /**
+     *
+     * @returns {modal|*}
+     */
+    getModal: function () {
         if (!this.modal) {
             this.modal = this.createModal();
         }
         return this.modal;
     },
-    hideModal: function() {
+
+    /**
+     *
+     * @returns {*}
+     */
+    hideModal: function () {
         this.getModal().style.display = 'none';
         return this;
     },
-    showModal: function() {
+
+    /**
+     *
+     * @returns {*}
+     */
+    showModal: function () {
         this.getModal().style.display = '';
         return this;
     }
 });
-
-/*  */
-var addPixelUnit = function(number){
+/* concat from'/Users/litsonzhang/workspace/jDialog/src/setting.js' */
+/**
+ *
+ * @param number
+ * @returns {*}
+ */
+var addPixelUnit = function (number) {
     if (!/em|px|rem|pt/gi.test(number)) {
         number = number + 'px';
     }
@@ -279,38 +416,72 @@ var addPixelUnit = function(number){
 }
 
 jDialog.fn.extend({
-    setTitle: function(text) {
+
+    /**
+     *
+     * @param text
+     * @returns {*}
+     */
+    setTitle: function (text) {
         this.getHeader().innerHTML = text;
         return this;
     },
-    setMsg: function(msg) {
+
+    /**
+     *
+     * @param msg
+     * @returns {*}
+     */
+    setMsg: function (msg) {
         this.getContainer().innerHTML = msg;
         return this;
     },
-    setHeight: function(value) {
+
+    /**
+     *
+     * @param value
+     * @returns {*}
+     */
+    setHeight: function (value) {
         this.wrapper.style.height = addPixelUnit(value);
         return this;
     },
-    setWidth: function(value) {
+
+    /**
+     *
+     * @param value
+     * @returns {*}
+     */
+    setWidth: function (value) {
         this.wrapper.style.width = addPixelUnit(value);
         return this;
     },
-    setIndex: function(index) {
+
+    /**
+     *
+     * @param index
+     * @returns {*}
+     */
+    setIndex: function (index) {
         this.currentDOMIndex = index || 9;
         this.wrapper.style.zIndex = this.currentDOMIndex;
         // 永远比wrapper小1
         this.getModal().style.zIndex = this.currentDOMIndex - 1;
         return this;
     },
-    setTop: function(value) {
+
+    /**
+     *
+     * @param value
+     * @returns {*}
+     */
+    setTop: function (value) {
         this.wrapper.style.top = addPixelUnit(value);
         return this;
-    },
+    }
 });
 
-/*  */
-
-    window.jDialog = jDialog;
-
+ window.jDialog = jDialog;
 })(window, window.document);
+
 //# sourceMappingURL=../maps/jDialog.js.map
