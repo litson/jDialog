@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <title>Document</title>
-    <link rel="stylesheet" href="http://cdn.staticfile.org/normalize/3.0.1/normalize.min.css"/>
+    <title>jDialog</title>
+    <link rel="stylesheet" href="http://cdn.staticfile.org/twitter-bootstrap/3.3.0/css/bootstrap.min.css"/>
     <style>
         .dialog {
+            font: 14px/1.5em tahoma, 'Microsoft yahei', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            color: #555;
+
             background-color: #fff;
             border-radius: 5px;
+            border: 1px solid #ddd;
             overflow: hidden;
 
-            color: #000;
             width: 90%;;
 
             /* 居中；上线居中就设置top：0，bottom：0 */
@@ -31,8 +34,8 @@
 
         .dialog-header {
             text-indent: 1em;
-            height: 2.5em;
-            line-height: 2.5em;
+            height: 3em;
+            line-height: 3em;
             background-color: #f7f7f7;
         }
 
@@ -53,7 +56,7 @@
             border-radius: 5px;
             color: inherit;
             padding: .8em 0;
-            margin:.8em;
+            margin: .8em;
         }
 
         .dialog-btn-primary {
@@ -65,7 +68,34 @@
 </head>
 <body>
 
+<a class="btn btn-primary" href="javascript:;" onclick="testBed('test1')">一个普通的dialog</a>
+<a class="btn btn-primary" href="javascript:;" onclick="testBed('test2')">一个confirm like dialog</a>
+<a class="btn btn-primary" href="javascript:;" onclick="testBed('test3')">一个自定义dialog</a>
 
 <script src="dialog.js"></script>
+<script>
+
+    var handlerMapping = {
+        test1: function () {
+            jDialog('一个普通的dialog');
+        },
+        test2: function () {
+            jDialog('确定要删除吗？', function () {
+                alert('谢谢！');
+                this.destory();
+            });
+        },
+        test3: function () {
+            jDialog({
+                modal: false,
+                msg: '一个不带模式窗口的dialog'
+            });
+        }
+    }
+
+    function testBed(type) {
+        return handlerMapping[type]();
+    }
+</script>
 </body>
 </html>

@@ -22,7 +22,7 @@
     // 基础原形
     D.fn = D.prototype = {
         constructor: D,
-        options: DEFAULT,
+        //options: DEFAULT,
         initEventSystem: function () {
             var self = this;
             var ret = {};
@@ -67,7 +67,7 @@
             if (!message) {
                 return this;
             }
-
+            this.options = DEFAULT;
             if (this.isPlainObject(message)) {
                 this.extend(this.options, message);
 
