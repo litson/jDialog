@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>Document</title>
+    <link rel="stylesheet" href="http://cdn.staticfile.org/normalize/3.0.1/normalize.min.css"/>
+    <style>
+        .dialog {
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+
+            color: #000;
+            width: 90%;;
+
+            /* 居中；上线居中就设置top：0，bottom：0 */
+            position: fixed;
+            margin: auto;
+            left: 0;
+            right: 0;
+
+        }
+
+        .dialog,
+        .dialog *,
+        .dialog *:before,
+        .dialog *:after {
+            -webkit-box-sizing: border-box;
+        }
+
+        .dialog-header {
+            text-indent: 1em;
+            height: 2.5em;
+            line-height: 2.5em;
+            background-color: #f7f7f7;
+        }
+
+        .dialog-body {
+            padding: .5em;;
+        }
+
+        .dialog-footer {
+            display: -webkit-box;
+        }
+
+        .dialog-btn {
+            -webkit-box-flex: 1;
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            color: inherit;
+            padding: .8em 0;
+            margin:.8em;
+        }
+
+        .dialog-btn-primary {
+            border-color: #e94543;
+            color: #fff;
+            background-color: #e94543;;
+        }
+    </style>
+</head>
+<body>
+
+
+<script src="dialog.js"></script>
+</body>
+</html>
