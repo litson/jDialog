@@ -1,6 +1,7 @@
 
 ;(function (window, document) {
 
+
 /* concat from'/Users/litsonzhang/workspace/jDialog/src/core.js' */
 var win = window;
 var doc = document;
@@ -17,7 +18,7 @@ var jDialog = function (message, callBack) {
  */
 jDialog.fn = jDialog.prototype = {
     constructor: jDialog,
-
+    version: '0.9.1',
     /**
      *
      * @param message
@@ -96,6 +97,7 @@ jDialog.fn.extend = function () {
  * @type {{constructor: Function, init: Function}|jDialog.fn|*}
  */
 jDialog.fn.init.prototype = jDialog.fn;
+
 /* concat from'/Users/litsonzhang/workspace/jDialog/src/helper.js' */
 jDialog.fn.extend({
 
@@ -120,6 +122,7 @@ jDialog.fn.extend({
         return obj.constructor == {}.constructor;
     }
 });
+
 /* concat from'/Users/litsonzhang/workspace/jDialog/src/event.js' */
 jDialog.fn.extend({
 
@@ -166,6 +169,7 @@ jDialog.fn.extend({
         return ret;
     }
 });
+
 /* concat from'/Users/litsonzhang/workspace/jDialog/src/operations.js' */
 jDialog.fn.extend({
 
@@ -174,22 +178,19 @@ jDialog.fn.extend({
      * @returns {*}
      */
     renderDOM: function () {
-        this.wrapper = this._createElement('div', {
-            className: 'dialog'
-        });
 
-        this.wrapper.style.zIndex = this.currentDOMIndex = 9;
+        var wrapper = this.getWrapper();
 
-        this.wrapper
+        wrapper
             .appendChild(this.getHeader());
-        this.wrapper
+        wrapper
             .appendChild(this.getContainer());
-        this.wrapper
+        wrapper
             .appendChild(this.getFooter());
 
         //
-        this.setTitle(this.options.title)
-            .setMsg(this.options.msg);
+        this.title(this.options.title)
+            .message(this.options.msg);
 
         if (this.options.modal) {
             this.showModal();
@@ -198,10 +199,11 @@ jDialog.fn.extend({
         if (this.options.callBack) {
             this.addButton('确定', 'apply', this.options.callBack);
         }
+
         this.addButton('取消', 'destory');
 
-        this.wrapper.addEventListener('click', this.eventRouter.bind(this), false);
-        doc.body.appendChild(this.wrapper);
+        wrapper.addEventListener('click', this.eventRouter.bind(this), false);
+        doc.body.appendChild(wrapper);
         return this;
     },
 
@@ -229,6 +231,18 @@ jDialog.fn.extend({
         var element = doc.createElement(tagName);
         this.extend(element, attrs);
         return element;
+    },
+
+    getWrapper: function () {
+        if (!this.wrapper) {
+            this.wrapper = this._createElement('div', {
+                className: 'dialog'
+            });
+
+            this.wrapper.style.zIndex = this.currentDOMIndex = 9;
+        }
+
+        return this.wrapper;
     },
 
     /**
@@ -327,8 +341,8 @@ jDialog.fn.extend({
         if (this.events.has(actionName)) {
             var actions = this.events.actions[actionName];
             var length = actions.length;
-            var i;
-            var fn;
+            var i = 0;
+            //var fn;
             if (!length) {
                 return this;
             }
@@ -336,7 +350,7 @@ jDialog.fn.extend({
             //    fn.call(this);
             //}
 
-            for (i = 0; i < length; i++) {
+            for (; i < length; i++) {
                 actions[i].call(this);
             }
         }
@@ -402,6 +416,7 @@ jDialog.fn.extend({
         return this;
     }
 });
+
 /* concat from'/Users/litsonzhang/workspace/jDialog/src/setting.js' */
 /**
  *
@@ -409,7 +424,7 @@ jDialog.fn.extend({
  * @returns {*}
  */
 var addPixelUnit = function (number) {
-    if (!/em|px|rem|pt/gi.test(number)) {
+    if (!/em|px|rem|pt|%/gi.test(number)) {
         number = number + 'px';
     }
     return number;
@@ -418,52 +433,67 @@ var addPixelUnit = function (number) {
 jDialog.fn.extend({
 
     /**
-     *
+     * 返回当前的title或为dialog设置title
      * @param text
      * @returns {*}
      */
-    setTitle: function (text) {
-        this.getHeader().innerHTML = text;
+    title: function (value) {
+        if (value === undefined) {
+            return this.options.title;
+        }
+        this.getHeader().innerHTML = value;
         return this;
     },
 
     /**
-     *
-     * @param msg
-     * @returns {*}
-     */
-    setMsg: function (msg) {
-        this.getContainer().innerHTML = msg;
-        return this;
-    },
-
-    /**
-     *
+     * 返回当前设置的message或设置message
      * @param value
      * @returns {*}
      */
-    setHeight: function (value) {
+    message: function (value) {
+        if (value === undefined) {
+            return this.options.msg;
+        }
+        this.getContainer().innerHTML = value;
+        return this;
+    },
+
+    /**
+     * 返回当前的height或为dialog设置height
+     * @param value
+     * @returns {*}
+     */
+    height: function (value) {
+        if (value === undefined) {
+            return this.getWrapper().offsetHeight;
+        }
         this.wrapper.style.height = addPixelUnit(value);
         return this;
     },
 
     /**
-     *
+     * 返回当前dialog的宽度或为dialog设置宽度
      * @param value
      * @returns {*}
      */
-    setWidth: function (value) {
+    width: function (value) {
+        if (value === undefined) {
+            return this.getWrapper().offsetWidth;
+        }
         this.wrapper.style.width = addPixelUnit(value);
         return this;
     },
 
     /**
-     *
+     * 返回当前的z-index值或为dialog设置z-index
      * @param index
      * @returns {*}
      */
-    setIndex: function (index) {
-        this.currentDOMIndex = index || 9;
+    index: function (value) {
+        if (value === undefined) {
+            return this.currentDOMIndex;
+        }
+        this.currentDOMIndex = value;
         this.wrapper.style.zIndex = this.currentDOMIndex;
         // 永远比wrapper小1
         this.getModal().style.zIndex = this.currentDOMIndex - 1;
@@ -471,11 +501,14 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     *  返回当前的top值或者为dialog设置top
      * @param value
      * @returns {*}
      */
-    setTop: function (value) {
+    top: function (value) {
+        if (value === undefined) {
+            return win.getComputedStyle(this.getWrapper()).top;
+        }
         this.wrapper.style.top = addPixelUnit(value);
         return this;
     }

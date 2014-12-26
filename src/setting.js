@@ -4,7 +4,7 @@
  * @returns {*}
  */
 var addPixelUnit = function (number) {
-    if (!/em|px|rem|pt/gi.test(number)) {
+    if (!/em|px|rem|pt|%/gi.test(number)) {
         number = number + 'px';
     }
     return number;
@@ -13,52 +13,67 @@ var addPixelUnit = function (number) {
 jDialog.fn.extend({
 
     /**
-     *
+     * 返回当前的title或为dialog设置title
      * @param text
      * @returns {*}
      */
-    setTitle: function (text) {
-        this.getHeader().innerHTML = text;
+    title: function (value) {
+        if (value === undefined) {
+            return this.options.title;
+        }
+        this.getHeader().innerHTML = value;
         return this;
     },
 
     /**
-     *
-     * @param msg
-     * @returns {*}
-     */
-    setMsg: function (msg) {
-        this.getContainer().innerHTML = msg;
-        return this;
-    },
-
-    /**
-     *
+     * 返回当前设置的message或设置message
      * @param value
      * @returns {*}
      */
-    setHeight: function (value) {
+    message: function (value) {
+        if (value === undefined) {
+            return this.options.msg;
+        }
+        this.getContainer().innerHTML = value;
+        return this;
+    },
+
+    /**
+     * 返回当前的height或为dialog设置height
+     * @param value
+     * @returns {*}
+     */
+    height: function (value) {
+        if (value === undefined) {
+            return this.getWrapper().offsetHeight;
+        }
         this.wrapper.style.height = addPixelUnit(value);
         return this;
     },
 
     /**
-     *
+     * 返回当前dialog的宽度或为dialog设置宽度
      * @param value
      * @returns {*}
      */
-    setWidth: function (value) {
+    width: function (value) {
+        if (value === undefined) {
+            return this.getWrapper().offsetWidth;
+        }
         this.wrapper.style.width = addPixelUnit(value);
         return this;
     },
 
     /**
-     *
+     * 返回当前的z-index值或为dialog设置z-index
      * @param index
      * @returns {*}
      */
-    setIndex: function (index) {
-        this.currentDOMIndex = index || 9;
+    index: function (value) {
+        if (value === undefined) {
+            return this.currentDOMIndex;
+        }
+        this.currentDOMIndex = value;
         this.wrapper.style.zIndex = this.currentDOMIndex;
         // 永远比wrapper小1
         this.getModal().style.zIndex = this.currentDOMIndex - 1;
@@ -66,11 +81,14 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     *  返回当前的top值或者为dialog设置top
      * @param value
      * @returns {*}
      */
-    setTop: function (value) {
+    top: function (value) {
+        if (value === undefined) {
+            return win.getComputedStyle(this.getWrapper()).top;
+        }
         this.wrapper.style.top = addPixelUnit(value);
         return this;
     }

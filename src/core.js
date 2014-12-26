@@ -13,7 +13,7 @@ var jDialog = function (message, callBack) {
  */
 jDialog.fn = jDialog.prototype = {
     constructor: jDialog,
-
+    version: '0.9.1',
     /**
      *
      * @param message

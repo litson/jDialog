@@ -26,7 +26,7 @@ gulp.task('concat', function() {
         .pipe(sourcemaps.init())
         .pipe(concat('jDialog.js', {
             process: function(src) {
-                var pathComments = "/* concat from'" + this.path + "' */\n"
+                var pathComments = "\n/* concat from'" + this.path + "' */\n"
                 return pathComments + src.trim();
             }
         }))

@@ -5,22 +5,19 @@ jDialog.fn.extend({
      * @returns {*}
      */
     renderDOM: function () {
-        this.wrapper = this._createElement('div', {
-            className: 'dialog'
-        });
 
-        this.wrapper.style.zIndex = this.currentDOMIndex = 9;
+        var wrapper = this.getWrapper();
 
-        this.wrapper
+        wrapper
             .appendChild(this.getHeader());
-        this.wrapper
+        wrapper
             .appendChild(this.getContainer());
-        this.wrapper
+        wrapper
             .appendChild(this.getFooter());
 
         //
-        this.setTitle(this.options.title)
-            .setMsg(this.options.msg);
+        this.title(this.options.title)
+            .message(this.options.msg);
 
         if (this.options.modal) {
             this.showModal();
@@ -29,10 +26,11 @@ jDialog.fn.extend({
         if (this.options.callBack) {
             this.addButton('确定', 'apply', this.options.callBack);
         }
+
         this.addButton('取消', 'destory');
 
-        this.wrapper.addEventListener('click', this.eventRouter.bind(this), false);
-        doc.body.appendChild(this.wrapper);
+        wrapper.addEventListener('click', this.eventRouter.bind(this), false);
+        doc.body.appendChild(wrapper);
         return this;
     },
 
@@ -60,6 +58,18 @@ jDialog.fn.extend({
         var element = doc.createElement(tagName);
         this.extend(element, attrs);
         return element;
+    },
+
+    getWrapper: function () {
+        if (!this.wrapper) {
+            this.wrapper = this._createElement('div', {
+                className: 'dialog'
+            });
+
+            this.wrapper.style.zIndex = this.currentDOMIndex = 9;
+        }
+
+        return this.wrapper;
     },
 
     /**
@@ -158,8 +168,8 @@ jDialog.fn.extend({
         if (this.events.has(actionName)) {
             var actions = this.events.actions[actionName];
             var length = actions.length;
-            var i;
-            var fn;
+            var i = 0;
+            //var fn;
             if (!length) {
                 return this;
             }
@@ -167,7 +177,7 @@ jDialog.fn.extend({
             //    fn.call(this);
             //}
 
-            for (i = 0; i < length; i++) {
+            for (; i < length; i++) {
                 actions[i].call(this);
             }
         }
