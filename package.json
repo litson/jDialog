@@ -1,0 +1,13 @@
+{
+  "name": "jDialog",
+  "version": "0.0.1",
+  "main": "dist/jDialog.js",
+  "author": {
+    "name": "Just me"
+  },
+  "devDependencies":{
+    "gulp":"latest",
+    "gulp-watch":"latest",
+    "gulp-concat":"latest"
+  }
+}
