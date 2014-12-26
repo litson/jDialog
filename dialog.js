@@ -310,7 +310,7 @@
     });
     //D.currentDialog;
 
-    this.D = D;
+    this.jDialog = D;
 
 }.call(this);
 
