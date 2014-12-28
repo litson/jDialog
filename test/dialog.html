@@ -11,9 +11,13 @@
 
 <body>
 
-    <a class="btn btn-primary" href="javascript:;" onclick="testBed('test1')">一个普通的dialog</a>
-    <a class="btn btn-primary" href="javascript:;" onclick="testBed('test2')">一个confirm like dialog</a>
-    <a class="btn btn-primary" href="javascript:;" onclick="testBed('test3')">一个自定义dialog</a>
+<p><a class="btn btn-primary" href="javascript:;" onclick="testBed('test1')">一个普通的dialog</a></p>
+
+<p><a class="btn btn-primary" href="javascript:;" onclick="testBed('test2')">一个confirm like dialog</a></p>
+
+<p><a class="btn btn-primary" href="javascript:;" onclick="testBed('test3')">一个自定义dialog</a></p>
+
+<p><a class="btn btn-primary" href="javascript:;" onclick="testBed('test4')">多内容</a></p>
 
     <script src="../dist/jDialog.js"></script>
     <script>
@@ -32,6 +36,24 @@
                     modal: false,
                     msg: '一个不带模式窗口的dialog'
                 });
+            },
+            test4: function () {
+                jDialog('<div>' +
+                'Toast 是一个 View 视图,快速的为用户显示少量的信息。 ' +
+                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+                '不影响用户的输入等操作,主要用于 一些帮助 /...' +
+                '</div>');
             }
         }
 

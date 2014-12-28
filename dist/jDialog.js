@@ -203,6 +203,24 @@ jDialog.fn.extend({
 
         wrapper.addEventListener('click', this.eventRouter.bind(this), false);
         doc.body.appendChild(wrapper);
+
+        // 计算top
+        var clientHeight = doc.documentElement.clientHeight;
+        // 如果dialog的高度大于视口的高度
+        if (this.height() > clientHeight) {
+            this.height(clientHeight - 30);
+            this.getContainer().style.height =
+                this.height()
+                - (this.getHeader().offsetHeight + this.getFooter().offsetHeight)
+                + 'px';
+        } else {
+            this.height(this.height());
+        }
+        this.extend(wrapper.style, {
+            bottom: 0,
+            top: 0
+        });
+
         return this;
     },
 
