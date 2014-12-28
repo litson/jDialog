@@ -153,9 +153,51 @@ jDialog.fn.extend({
 
     /**
      *
+     * @param className
      * @returns {*}
      */
-    autoHide: function () {
+    addClass: function (className) {
+        this.getWrapper().classList.add(className);
+        return this;
+    },
+
+    /**
+     *
+     * @param className
+     */
+    removeClass: function (className) {
+        this.getWrapper().classList.remove(className);
+    },
+
+    /**
+     *
+     * @returns {*}
+     */
+    autoHide: function (delay) {
+
+        // 0则自动销毁；
+        if (delay == 0) {
+            this.destory();
+            return this;
+        }
+
+        //
+        if (delay === undefined) {
+            this.autoHide(this.options.autoHide);
+            return this;
+        }
+
+        // 将会已最新的delay为准
+        if (this.autoHideTimer) {
+            clearTimeout(this.autoHideTimer);
+        }
+
+        this.autoHideTimer = setTimeout(function () {
+            this.destory();
+            clearTimeout(this.autoHideTimer);
+            this.autoHideTimer = null;
+        }.bind(this), delay * 1000);
+
         return this;
     },
 
@@ -190,12 +232,12 @@ jDialog.fn.extend({
      */
     destory: function () {
         if (this.wrapper) {
+            this.wrapper.removeEventListener('click', this.eventRouter, false);
             doc.body.removeChild(this.wrapper);
         }
         if (this.modal) {
             doc.body.removeChild(this.modal);
         }
-        this.wrapper.removeEventListener('click', this.eventRouter, false);
         jDialog.currentDialog = null;
         return this;
     },

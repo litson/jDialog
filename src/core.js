@@ -40,9 +40,8 @@ jDialog.fn = jDialog.prototype = {
         if (this.isPlainObject(message)) {
             this.extend(this.options, message);
 
-        } else if (typeof message === 'string') {
+        } else if (/string|number|boolean/gi.test(typeof(message))) {
             this.options.msg = message;
-
             if (this.isFunction(callBack)) {
                 this.options.callBack = callBack;
             }
@@ -65,7 +64,7 @@ jDialog.fn = jDialog.prototype = {
  *
  * @returns {*|{}}
  */
-jDialog.fn.extend = function () {
+jDialog.extend = jDialog.fn.extend = function () {
 
     var target = arguments[0] || {};
     var options = arguments[1] || {};

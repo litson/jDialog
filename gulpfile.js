@@ -3,7 +3,7 @@ var watch = require('gulp-watch');
 var concat = require('gulp-concat-util');
 var sourcemaps = require('gulp-sourcemaps');
 
-var jsPath = ['core.js', 'helper.js', 'event.js', 'operations.js', 'setting.js'];
+var jsPath = ['core.js', 'helper.js', 'event.js', 'operations.js', 'setting.js','components.js'];
 var distPath = './dist/';
 
 function addPrefixToEachItem(prefix, items) {

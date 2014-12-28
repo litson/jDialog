@@ -1,4 +1,4 @@
-jDialog -
+jDialog - a dialog is used like jQuery
 ======
 
 ## Guides
