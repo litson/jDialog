@@ -49,7 +49,19 @@ jDialog.fn.extend({
             top: 0
         });
 
+        this.toggleLockBody(true);
         return this;
+    },
+
+    toggleLockBody: function (useLock) {
+        var height = "";
+        var hiddenType = "";
+        if (useLock) {
+            height = "100%";
+            hiddenType = "hidden";
+        }
+        doc.body.style.height = height;
+        doc.body.style.overflow = hiddenType;
     },
 
     /**
@@ -256,6 +268,7 @@ jDialog.fn.extend({
         if (this.modal) {
             doc.body.removeChild(this.modal);
         }
+        this.toggleLockBody(false);
         jDialog.currentDialog = null;
         return this;
     },
