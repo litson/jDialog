@@ -1,4 +1,4 @@
-jDialog - a dialog is used like jQuery
+jDialog - a dialog is used like jQuery [![Built with Gulp](https://cdn.gruntjs.com/builtwith.png)](http://gulpjs.com/)
 ======
 
 ## Guides
@@ -23,7 +23,32 @@ jDialog - a dialog is used like jQuery
 
 
 ```
+## Options
+```js
+
+    jDialog({
+
+            title: '提示',                  // [String]     dialog 的 title
+            modal: true,                // [Boolean]  是否启用模式窗口
+            msg: '',                        // [HTMLstring | string]      需要显示的信息
+            autoHide: 0,                // [Number]    自动销毁，单位（s）
+            preventHide: false,      //  [Boolean]    尚未实现
+            callBack: null               //  [Function]   这里和events系统是重头，
+                                              //  但目前没有太好的想法
+
+    });
+
+
+```
 
 ## API
+
+### width()
+
+    * width( value ) @Returns: jDialog
+        为dialog设置CSS width ，可以是Number，百分比、em、pt、rem等；
+        没有单位默认为pixel；
+    * width()           @Returns: Number
+        返回dialog的offsetWidth
 
 ## Questions?
