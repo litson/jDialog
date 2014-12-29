@@ -13,9 +13,9 @@ var jDialog = function (message, callBack) {
  */
 jDialog.fn = jDialog.prototype = {
     constructor: jDialog,
-    version: '0.9.1',
+    version: '0.9.3',
     /**
-     *
+     * @method init
      * @param message
      * @param callBack
      * @returns {jDialog}
@@ -61,7 +61,7 @@ jDialog.fn = jDialog.prototype = {
 }
 
 /**
- *
+ * 浅copy
  * @returns {*|{}}
  */
 jDialog.extend = jDialog.fn.extend = function () {

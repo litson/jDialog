@@ -9,6 +9,8 @@
         "gulp": "latest",
         "gulp-watch": "latest",
         "gulp-concat-util": "latest",
-        "gulp-sourcemaps": "latest"
+        "gulp-sourcemaps": "latest",
+        "gulp-yuidoc":"latest",
+        "gulp-docco":"latest"
     }
 }

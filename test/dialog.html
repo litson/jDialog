@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>jDialog</title>
-    <link rel="stylesheet" href="http://cdn.staticfile.org/twitter-bootstrap/3.3.0/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../src/dialog.css" />
+    <link rel="stylesheet" href="http://cdn.staticfile.org/twitter-bootstrap/3.3.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../src/dialog.css"/>
 </head>
 
 <body>
@@ -19,48 +19,50 @@
 
 <p><a class="btn btn-primary" href="javascript:;" onclick="testBed('test4')">多内容</a></p>
 
-    <script src="../dist/jDialog.js"></script>
-    <script>
-        var handlerMapping = {
-            test1: function() {
-                jDialog('一个普通的dialog');
-            },
-            test2: function() {
-                jDialog('确定要删除吗？', function() {
-                    alert('谢谢！');
-                    this.destory();
-                });
-            },
-            test3: function() {
-                jDialog({
-                    modal: false,
-                    msg: '一个不带模式窗口的dialog'
-                });
-            },
-            test4: function () {
-                jDialog('<div>' +
-                'Toast 是一个 View 视图,快速的为用户显示少量的信息。 ' +
-                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
-                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
-                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
-                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
-                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
-                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
-                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
-                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
-                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
-                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
-                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
-                'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
-                '不影响用户的输入等操作,主要用于 一些帮助 /...' +
-                '</div>');
-            }
-        }
 
-            function testBed(type) {
-                return handlerMapping[type]();
-            }
-    </script>
+
+<script src="../dist/jDialog.js"></script>
+<script>
+    var handlerMapping = {
+        test1: function () {
+            jDialog('一个普通的dialog');
+        },
+        test2: function () {
+            jDialog('确定要删除吗？', function () {
+                alert('谢谢！');
+                this.destory();
+            });
+        },
+        test3: function () {
+            jDialog({
+                modal: false,
+                msg: '一个不带模式窗口的dialog'
+            });
+        },
+        test4: function () {
+            jDialog('<div>' +
+            'Toast 是一个 View 视图,快速的为用户显示少量的信息。 ' +
+            'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+            'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+            'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+            'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+            'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+            'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+            'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+            'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+            'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+            'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+            'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+            'Toast 在应用程序上浮动显示信息给用户,它永远不会获得焦点,' +
+            '不影响用户的输入等操作,主要用于 一些帮助 /...' +
+            '</div>');
+        }
+    }
+
+    function testBed(type) {
+        return handlerMapping[type]();
+    }
+</script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 /**
- *
+ *  设置类函数集
  * @param number
  * @returns {*}
  */
@@ -90,6 +90,7 @@ jDialog.fn.extend({
             return win.getComputedStyle(this.getWrapper()).top;
         }
         this.wrapper.style.top = addPixelUnit(value);
+        this.wrapper.style.bottom = "";
         return this;
     }
 });

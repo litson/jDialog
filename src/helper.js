@@ -1,7 +1,6 @@
 jDialog.fn.extend({
-
     /**
-     *
+     * is function
      * @param fn
      * @returns {boolean}
      */
@@ -10,7 +9,7 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     * 简单高效
      * @param obj
      * @returns {boolean}
      */

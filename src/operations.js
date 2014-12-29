@@ -53,6 +53,10 @@ jDialog.fn.extend({
         return this;
     },
 
+    /**
+     *
+     * @param useLock
+     */
     toggleLockBody: function (useLock) {
         var height = "";
         var hiddenType = "";
@@ -90,6 +94,10 @@ jDialog.fn.extend({
         return element;
     },
 
+    /**
+     *  获取dialog的DOM结构
+     * @returns {HTMLElement|*|wrapper}
+     */
     getWrapper: function () {
         if (!this.wrapper) {
             this.wrapper = this._createElement('div', {
@@ -103,7 +111,7 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     *  获取页头的DOM结构
      * @returns {HTMLElement|*|header}
      */
     getHeader: function () {
@@ -116,7 +124,7 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     * 隐藏页头
      * @returns {*}
      */
     hideHeader: function () {
@@ -125,7 +133,7 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     * 获取当前dialog内容的DOM结构
      * @returns {HTMLElement|*|container}
      */
     getContainer: function () {
@@ -138,7 +146,7 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     * 获取页尾的dom结构
      * @returns {HTMLElement|*|footer}
      */
     getFooter: function () {
@@ -151,7 +159,7 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     * 隐藏页尾
      * @returns {*}
      */
     hideFooter: function () {
@@ -182,7 +190,7 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     * 为当前dialog添加class
      * @param className
      * @returns {*}
      */
@@ -192,7 +200,7 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     * 为当前dialog添加remove
      * @param className
      */
     removeClass: function (className) {
@@ -200,7 +208,8 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     * 设置自动隐藏时间
+     * @param delay  为0，直接销毁；不设置，采用默认用户设置；
      * @returns {*}
      */
     autoHide: function (delay) {
@@ -288,7 +297,7 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     * 获取当前dialog的Modal的DOM结构
      * @returns {modal|*}
      */
     getModal: function () {
@@ -299,7 +308,7 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     * 隐藏当前dialog的Modal
      * @returns {*}
      */
     hideModal: function () {
@@ -308,7 +317,7 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     * 显示当前dialog的Modal
      * @returns {*}
      */
     showModal: function () {

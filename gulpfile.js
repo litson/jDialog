@@ -2,8 +2,10 @@ var gulp = require('gulp');
 var watch = require('gulp-watch');
 var concat = require('gulp-concat-util');
 var sourcemaps = require('gulp-sourcemaps');
+var yuidoc = require('gulp-yuidoc');
+var docco = require("gulp-docco");
 
-var jsPath = ['core.js', 'helper.js', 'event.js', 'operations.js', 'setting.js','components.js'];
+var jsPath = ['core.js', 'helper.js', 'event.js', 'operations.js', 'setting.js', 'components.js'];
 var distPath = './dist/';
 
 function addPrefixToEachItem(prefix, items) {
@@ -17,7 +19,19 @@ function addPrefixToEachItem(prefix, items) {
 }
 jsPath = addPrefixToEachItem('./src/', jsPath);
 
-gulp.task('concat', function() {
+// todo:文档生成
+gulp.task('docs', function () {
+    //gulp.src(jsPath)
+    //    .pipe(yuidoc())
+    //    //.pipe(yuidoc.reporter())
+    //    //.pipe(yuidoc.generator())
+    //    .pipe(gulp.dest('./docs/'));
+    //gulp.src(jsPath)
+    //    .pipe(docco())
+    //    .pipe(gulp.dest('./docs/'));
+});
+
+gulp.task('concat', function () {
 
     var fileHeader = '\n;(function (window, document) {\n\n';
     var fileFooter = '\n\n window.jDialog = jDialog;\n})(window, window.document);\n';
@@ -25,8 +39,8 @@ gulp.task('concat', function() {
     gulp.src(jsPath)
         .pipe(sourcemaps.init())
         .pipe(concat('jDialog.js', {
-            process: function(src) {
-                var pathComments = "\n/* concat from'" + this.path.replace(__dirname,"") + "' */\n"
+            process: function (src) {
+                var pathComments = "\n/* concat from'" + this.path.replace(__dirname, "") + "' */\n"
                 return pathComments + src.trim();
             }
         }))
@@ -37,9 +51,9 @@ gulp.task('concat', function() {
 
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
     gulp.src(jsPath)
-        .pipe(watch(jsPath, function() {
+        .pipe(watch(jsPath, function () {
             gulp.start('concat');
         }))
 
