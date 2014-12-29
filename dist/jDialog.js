@@ -10,7 +10,7 @@ var jDialog = function (message, callBack) {
      *
      */
     return new jDialog.fn.init(message, callBack);
-}
+};
 
 /**
  *
@@ -67,7 +67,7 @@ jDialog.fn = jDialog.prototype = {
         jDialog.currentDialog = this;
         return this;
     }
-}
+};
 
 /**
  * 浅copy
@@ -93,7 +93,7 @@ jDialog.extend = jDialog.fn.extend = function () {
     }
 
     return target;
-}
+};
 
 /**
  *
@@ -166,7 +166,7 @@ jDialog.event = {
             }
         }
     }
-}
+};
 
 /* concat from'/src/operations.js' */
 jDialog.fn.extend({
@@ -221,9 +221,7 @@ jDialog.fn.extend({
             if (dialogHeight > clientHeight) {
                 dialogHeight = clientHeight - 30;
                 this.getContainer().style.height =
-                    dialogHeight
-                    - (this.getHeader().offsetHeight + this.getFooter().offsetHeight)
-                    + 'px';
+                    dialogHeight - (this.getHeader().offsetHeight + this.getFooter().offsetHeight) + 'px';
             }
             this.height(dialogHeight)
                 .toggleLockBody(true)
@@ -530,7 +528,7 @@ var addPixelUnit = function (number) {
         number = number + 'px';
     }
     return number;
-}
+};
 
 jDialog.fn.extend({
 
