@@ -1,45 +1,41 @@
-jDialog.fn.extend({
-
-    /**
-     *
-     * @returns {{}}
-     */
-    initEventSystem: function () {
-        var self = this;
-        var ret = {};
-
-        function add(actionName, handler) {
-            if (!self.events.has(actionName)) {
-                self.events.actions[actionName] = [];
-            }
-            if (self.isFunction(handler)) {
-                self.events.actions[actionName].push(handler);
-            }
-
+/**
+ *
+ * @type {{add: Function, remove: Function, has: Function, fire: Function}}
+ */
+jDialog.event = {
+    add: function (actionName, handler) {
+        var self = this.root;
+        if (!this.has(actionName)) {
+            self.actions[actionName] = [];
         }
-
-        function remove(actionName) {
-            if (self.events.has(actionName)) {
-                return delete  self.events.actions[actionName];
+        if (self.isFunction(handler)) {
+            self.actions[actionName].push(handler);
+        }
+    },
+    remove: function (actionName) {
+        var self = this.root;
+        if (this.has(actionName)) {
+            return delete self.actions[actionName];
+        }
+        console.warn(actionName + '不存在');
+        return false;
+    },
+    has: function (actionName) {
+        var self = this.root;
+        return self.actions[actionName] ? true : false;
+    },
+    fire: function (actionName) {
+        var self = this.root;
+        if (this.has(actionName)) {
+            var actions = self.actions[actionName];
+            var length = actions.length;
+            if (!length) {
+                return false;
             }
-            console.warn(actionName + '不存在');
-            return false;
+            var i = 0;
+            for (; i < length; i++) {
+                actions[i].call(self);
+            }
         }
-
-        function has(actionName) {
-            return self.events.actions[actionName] ? true : false;
-        }
-
-        ret.actions = {
-            destory: [
-                function () {
-                    self.destory();
-                }
-            ]
-        };
-        ret.add = add;
-        ret.remove = remove;
-        ret.has = has;
-        return ret;
     }
-});
+}

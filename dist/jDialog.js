@@ -5,6 +5,7 @@
 /* concat from'\src\core.js' */
 var win = window;
 var doc = document;
+var event;
 var jDialog = function (message, callBack) {
     /**
      *
@@ -31,13 +32,16 @@ jDialog.fn = jDialog.prototype = {
             return this;
         }
         this.options = {
-            title: '提示', // title
-            modal: true, //是否启用模式窗口
-            msg: '', // messages
-            autoHide: 0, // 自动销毁
-            // 页面中只存活一个dialog，
-            // 此选择表述dialog.destroy将执行隐藏操作
-            // 而不销毁
+            title: '提示',          // title
+            modal: true,        //是否启用模式窗口
+            msg: '',                // messages
+            autoHide: 0,        // 自动销毁
+            /**
+             *  对话框class前缀，默认无
+             *  强制使用BEM规范
+             *  前缀在所有的dom结构上，均会被添加
+             */
+            prefix: "",
             preventHide: false,
             callBack: null
         };
@@ -52,11 +56,11 @@ jDialog.fn = jDialog.prototype = {
             }
         }
 
-        this.events = this.initEventSystem();
+        this.actions = {};
+        jDialog.event.root = this;
         this.renderDOM();
 
         // 只存活一个dialog
-        // TODO : options.preventHide;
         if (jDialog.currentDialog) {
             jDialog.currentDialog.destory();
         }
@@ -122,51 +126,47 @@ jDialog.fn.extend({
 });
 
 /* concat from'\src\event.js' */
-jDialog.fn.extend({
-
-    /**
-     *
-     * @returns {{}}
-     */
-    initEventSystem: function () {
-        var self = this;
-        var ret = {};
-
-        function add(actionName, handler) {
-            if (!self.events.has(actionName)) {
-                self.events.actions[actionName] = [];
-            }
-            if (self.isFunction(handler)) {
-                self.events.actions[actionName].push(handler);
-            }
-
+/**
+ *
+ * @type {{add: Function, remove: Function, has: Function, fire: Function}}
+ */
+jDialog.event = {
+    add: function (actionName, handler) {
+        var self = this.root;
+        if (!this.has(actionName)) {
+            self.actions[actionName] = [];
         }
-
-        function remove(actionName) {
-            if (self.events.has(actionName)) {
-                return delete  self.events.actions[actionName];
+        if (self.isFunction(handler)) {
+            self.actions[actionName].push(handler);
+        }
+    },
+    remove: function (actionName) {
+        var self = this.root;
+        if (this.has(actionName)) {
+            return delete self.actions[actionName];
+        }
+        console.warn(actionName + '不存在');
+        return false;
+    },
+    has: function (actionName) {
+        var self = this.root;
+        return self.actions[actionName] ? true : false;
+    },
+    fire: function (actionName) {
+        var self = this.root;
+        if (this.has(actionName)) {
+            var actions = self.actions[actionName];
+            var length = actions.length;
+            if (!length) {
+                return false;
             }
-            console.warn(actionName + '不存在');
-            return false;
+            var i = 0;
+            for (; i < length; i++) {
+                actions[i].call(self);
+            }
         }
-
-        function has(actionName) {
-            return self.events.actions[actionName] ? true : false;
-        }
-
-        ret.actions = {
-            destory: [
-                function () {
-                    self.destory();
-                }
-            ]
-        };
-        ret.add = add;
-        ret.remove = remove;
-        ret.has = has;
-        return ret;
     }
-});
+}
 
 /* concat from'\src\operations.js' */
 jDialog.fn.extend({
@@ -195,15 +195,17 @@ jDialog.fn.extend({
         }
 
         if (this.options.callBack) {
-            this.addButton('确定', 'apply', this.options.callBack);
+            //this.addButton('确定', 'apply', this.options.callBack);
         }
 
-        this.addButton('取消', 'destory');
+        this.addButton('取消', 'destory', function () {
+            this.destory();
+        });
 
         wrapper.addEventListener('click', this.eventRouter.bind(this), false);
         doc.body.appendChild(wrapper);
 
-        // 计算top
+        // 计算位置
         var clientHeight = doc.documentElement.clientHeight;
         // 如果dialog的高度大于视口的高度
         if (this.height() > clientHeight) {
@@ -249,7 +251,7 @@ jDialog.fn.extend({
         if (!actionName) {
             return;
         }
-        this.fireEvent(actionName);
+        jDialog.event.fire(actionName);
     },
 
     /**
@@ -271,8 +273,9 @@ jDialog.fn.extend({
      */
     getWrapper: function () {
         if (!this.wrapper) {
+            var prefix = this.options.prefix;
             this.wrapper = this._createElement('div', {
-                className: 'dialog'
+                className: prefix + 'dialog'
             });
 
             this.wrapper.style.zIndex = this.currentDOMIndex = 9;
@@ -287,8 +290,9 @@ jDialog.fn.extend({
      */
     getHeader: function () {
         if (!this.header) {
+            var prefix = this.options.prefix;
             this.header = this._createElement('div', {
-                className: 'dialog-header'
+                className: prefix + 'dialog-header'
             });
         }
         return this.header;
@@ -299,7 +303,10 @@ jDialog.fn.extend({
      * @returns {*}
      */
     hideHeader: function () {
-        this.getHeader().style.display = 'none';
+        var header = this.getHeader();
+        var height = header.offsetHeight;
+        this.height(this.height() - height);
+        header.style.display = 'none';
         return this;
     },
 
@@ -309,8 +316,9 @@ jDialog.fn.extend({
      */
     getContainer: function () {
         if (!this.container) {
+            var prefix = this.options.prefix;
             this.container = this._createElement('div', {
-                className: 'dialog-body'
+                className: prefix + 'dialog-body'
             });
         }
         return this.container;
@@ -322,8 +330,9 @@ jDialog.fn.extend({
      */
     getFooter: function () {
         if (!this.footer) {
+            var prefix = this.options.prefix;
             this.footer = this._createElement('div', {
-                className: 'dialog-footer'
+                className: prefix + 'dialog-footer'
             });
         }
         return this.footer;
@@ -334,7 +343,10 @@ jDialog.fn.extend({
      * @returns {*}
      */
     hideFooter: function () {
-        this.getFooter().style.display = 'none';
+        var footer = this.getFooter();
+        var height = footer.offsetHeight;
+        this.height(this.height() - height);
+        footer.style.display = 'none';
         return this;
     },
 
@@ -346,14 +358,15 @@ jDialog.fn.extend({
      * @returns {*}
      */
     addButton: function (text, actionName, handler) {
+        var prefix = this.options.prefix;
         var element = this._createElement('a', {
             href: 'javascript:;',
-            className: 'dialog-btn',
+            className: prefix + 'dialog-btn',
             innerHTML: text || '按钮'
         });
         if (actionName) {
             element.setAttribute('data-dialog-action', actionName);
-            this.events.add(actionName, handler);
+            jDialog.event.add(actionName, handler);
         }
         //
         this.getFooter().appendChild(element);
@@ -366,6 +379,12 @@ jDialog.fn.extend({
      * @returns {*}
      */
     addClass: function (className) {
+        // 自动补齐前缀
+        //var prefix = this.options.prefix;
+        //var reg = new RegExp('^' + prefix, 'gi');
+        //if (!reg.test(className)) {
+        //    className = prefix + className;
+        //}
         this.getWrapper().classList.add(className);
         return this;
     },
@@ -375,6 +394,11 @@ jDialog.fn.extend({
      * @param className
      */
     removeClass: function (className) {
+        //var prefix = this.options.prefix;
+        //var reg = new RegExp('^' + prefix, 'gi');
+        //if (!reg.test(className)) {
+        //    className = prefix + className;
+        //}
         this.getWrapper().classList.remove(className);
     },
 
@@ -413,31 +437,6 @@ jDialog.fn.extend({
 
     /**
      *
-     * @param actionName
-     * @returns {*}
-     */
-    fireEvent: function (actionName) {
-        if (this.events.has(actionName)) {
-            var actions = this.events.actions[actionName];
-            var length = actions.length;
-            var i = 0;
-            //var fn;
-            if (!length) {
-                return this;
-            }
-            //while ((fn = actions.shift())) {
-            //    fn.call(this);
-            //}
-
-            for (; i < length; i++) {
-                actions[i].call(this);
-            }
-        }
-        return this;
-    },
-
-    /**
-     *
      * @returns {*}
      */
     destory: function () {
@@ -461,7 +460,7 @@ jDialog.fn.extend({
         var element = this._createElement('div');
         element.style.cssText = ";background:rgba(0,0,0,0.3);width:100%;" + "height:100%;position:fixed;left:0;top:0;z-index:" + (this.currentDOMIndex - 1);
         element.onclick = function () {
-            this.fireEvent('destory');
+            //jDialog.event.fire('destory');
         }.bind(this);
         doc.body.appendChild(element);
         return element;
@@ -597,19 +596,27 @@ jDialog.fn.extend({
 
 /* concat from'\src\components.js' */
 /**
- *
+ *  封装一些常用的dialog
  */
-//jDialog.extend({
-//    alert: function (message, callBack) {
-//        return jDialog(message, callBack);
-//    },
-//    toast: function (message, callBack) {
-//        return jDialog(message, callBack).hideHeader().hideFooter().autoHide(1);
-//    },
-//    confirm: function (message, callBack) {
-//        return jDialog(message).addButton('ȷ��', 'apply', callBack);
-//    }
-//});
+jDialog.extend({
+    alert: function (message) {
+        return jDialog(message);
+    },
+    toast: function (message, delay) {
+        var dialog = jDialog(message);
+        dialog.getContainer().style.textAlign = "center";
+        dialog
+            .hideFooter()
+            .hideHeader()
+            .hideModal()
+            .addClass('dialog-toast')
+            .autoHide(delay || 3);
+        return dialog;
+    },
+    error: function (message, callBack) {
+        return jDialog(message,callBack).addClass('dialog-error');
+    }
+});
 
  window.jDialog = jDialog;
 })(window, window.document);

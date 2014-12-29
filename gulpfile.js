@@ -5,7 +5,11 @@ var sourcemaps = require('gulp-sourcemaps');
 var yuidoc = require('gulp-yuidoc');
 var docco = require("gulp-docco");
 
+var less = require('gulp-less');
+
+
 var jsPath = ['core.js', 'helper.js', 'event.js', 'operations.js', 'setting.js', 'components.js'];
+var lessPath = './src/*.less';
 var distPath = './dist/';
 
 function addPrefixToEachItem(prefix, items) {
@@ -31,6 +35,12 @@ gulp.task('docs', function () {
     //    .pipe(gulp.dest('./docs/'));
 });
 
+gulp.task('less', function () {
+    gulp.src(lessPath)
+        .pipe(less())
+        .pipe(gulp.dest(distPath));
+});
+
 gulp.task('concat', function () {
 
     var fileHeader = '\n;(function (window, document) {\n\n';
@@ -52,11 +62,17 @@ gulp.task('concat', function () {
 });
 
 gulp.task('watch', function () {
+    //
     gulp.src(jsPath)
         .pipe(watch(jsPath, function () {
             gulp.start('concat');
-        }))
+        }));
+    //
+    gulp.src(lessPath)
+        .pipe(watch(lessPath, function () {
+            gulp.start('less');
+        }));
 
 });
 
-gulp.task('default', ['concat', 'watch']);
+gulp.task('default', ['concat', 'less', 'watch']);

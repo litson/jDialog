@@ -1,5 +1,6 @@
 var win = window;
 var doc = document;
+var event;
 var jDialog = function (message, callBack) {
     /**
      *
@@ -26,13 +27,16 @@ jDialog.fn = jDialog.prototype = {
             return this;
         }
         this.options = {
-            title: '提示', // title
-            modal: true, //是否启用模式窗口
-            msg: '', // messages
-            autoHide: 0, // 自动销毁
-            // 页面中只存活一个dialog，
-            // 此选择表述dialog.destroy将执行隐藏操作
-            // 而不销毁
+            title: '提示',          // title
+            modal: true,        //是否启用模式窗口
+            msg: '',                // messages
+            autoHide: 0,        // 自动销毁
+            /**
+             *  对话框class前缀，默认无
+             *  强制使用BEM规范
+             *  前缀在所有的dom结构上，均会被添加
+             */
+            prefix: "",
             preventHide: false,
             callBack: null
         };
@@ -47,11 +51,11 @@ jDialog.fn = jDialog.prototype = {
             }
         }
 
-        this.events = this.initEventSystem();
+        this.actions = {};
+        jDialog.event.root = this;
         this.renderDOM();
 
         // 只存活一个dialog
-        // TODO : options.preventHide;
         if (jDialog.currentDialog) {
             jDialog.currentDialog.destory();
         }

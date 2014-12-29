@@ -24,15 +24,17 @@ jDialog.fn.extend({
         }
 
         if (this.options.callBack) {
-            this.addButton('确定', 'apply', this.options.callBack);
+            //this.addButton('确定', 'apply', this.options.callBack);
         }
 
-        this.addButton('取消', 'destory');
+        this.addButton('取消', 'destory', function () {
+            this.destory();
+        });
 
         wrapper.addEventListener('click', this.eventRouter.bind(this), false);
         doc.body.appendChild(wrapper);
 
-        // 计算top
+        // 计算位置
         var clientHeight = doc.documentElement.clientHeight;
         // 如果dialog的高度大于视口的高度
         if (this.height() > clientHeight) {
@@ -78,7 +80,7 @@ jDialog.fn.extend({
         if (!actionName) {
             return;
         }
-        this.fireEvent(actionName);
+        jDialog.event.fire(actionName);
     },
 
     /**
@@ -100,8 +102,9 @@ jDialog.fn.extend({
      */
     getWrapper: function () {
         if (!this.wrapper) {
+            var prefix = this.options.prefix;
             this.wrapper = this._createElement('div', {
-                className: 'dialog'
+                className: prefix + 'dialog'
             });
 
             this.wrapper.style.zIndex = this.currentDOMIndex = 9;
@@ -116,8 +119,9 @@ jDialog.fn.extend({
      */
     getHeader: function () {
         if (!this.header) {
+            var prefix = this.options.prefix;
             this.header = this._createElement('div', {
-                className: 'dialog-header'
+                className: prefix + 'dialog-header'
             });
         }
         return this.header;
@@ -128,7 +132,10 @@ jDialog.fn.extend({
      * @returns {*}
      */
     hideHeader: function () {
-        this.getHeader().style.display = 'none';
+        var header = this.getHeader();
+        var height = header.offsetHeight;
+        this.height(this.height() - height);
+        header.style.display = 'none';
         return this;
     },
 
@@ -138,8 +145,9 @@ jDialog.fn.extend({
      */
     getContainer: function () {
         if (!this.container) {
+            var prefix = this.options.prefix;
             this.container = this._createElement('div', {
-                className: 'dialog-body'
+                className: prefix + 'dialog-body'
             });
         }
         return this.container;
@@ -151,8 +159,9 @@ jDialog.fn.extend({
      */
     getFooter: function () {
         if (!this.footer) {
+            var prefix = this.options.prefix;
             this.footer = this._createElement('div', {
-                className: 'dialog-footer'
+                className: prefix + 'dialog-footer'
             });
         }
         return this.footer;
@@ -163,7 +172,10 @@ jDialog.fn.extend({
      * @returns {*}
      */
     hideFooter: function () {
-        this.getFooter().style.display = 'none';
+        var footer = this.getFooter();
+        var height = footer.offsetHeight;
+        this.height(this.height() - height);
+        footer.style.display = 'none';
         return this;
     },
 
@@ -175,14 +187,15 @@ jDialog.fn.extend({
      * @returns {*}
      */
     addButton: function (text, actionName, handler) {
+        var prefix = this.options.prefix;
         var element = this._createElement('a', {
             href: 'javascript:;',
-            className: 'dialog-btn',
+            className: prefix + 'dialog-btn',
             innerHTML: text || '按钮'
         });
         if (actionName) {
             element.setAttribute('data-dialog-action', actionName);
-            this.events.add(actionName, handler);
+            jDialog.event.add(actionName, handler);
         }
         //
         this.getFooter().appendChild(element);
@@ -195,6 +208,12 @@ jDialog.fn.extend({
      * @returns {*}
      */
     addClass: function (className) {
+        // 自动补齐前缀
+        //var prefix = this.options.prefix;
+        //var reg = new RegExp('^' + prefix, 'gi');
+        //if (!reg.test(className)) {
+        //    className = prefix + className;
+        //}
         this.getWrapper().classList.add(className);
         return this;
     },
@@ -204,6 +223,11 @@ jDialog.fn.extend({
      * @param className
      */
     removeClass: function (className) {
+        //var prefix = this.options.prefix;
+        //var reg = new RegExp('^' + prefix, 'gi');
+        //if (!reg.test(className)) {
+        //    className = prefix + className;
+        //}
         this.getWrapper().classList.remove(className);
     },
 
@@ -242,31 +266,6 @@ jDialog.fn.extend({
 
     /**
      *
-     * @param actionName
-     * @returns {*}
-     */
-    fireEvent: function (actionName) {
-        if (this.events.has(actionName)) {
-            var actions = this.events.actions[actionName];
-            var length = actions.length;
-            var i = 0;
-            //var fn;
-            if (!length) {
-                return this;
-            }
-            //while ((fn = actions.shift())) {
-            //    fn.call(this);
-            //}
-
-            for (; i < length; i++) {
-                actions[i].call(this);
-            }
-        }
-        return this;
-    },
-
-    /**
-     *
      * @returns {*}
      */
     destory: function () {
@@ -290,7 +289,7 @@ jDialog.fn.extend({
         var element = this._createElement('div');
         element.style.cssText = ";background:rgba(0,0,0,0.3);width:100%;" + "height:100%;position:fixed;left:0;top:0;z-index:" + (this.currentDOMIndex - 1);
         element.onclick = function () {
-            this.fireEvent('destory');
+            //jDialog.event.fire('destory');
         }.bind(this);
         doc.body.appendChild(element);
         return element;

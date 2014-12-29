@@ -1,6 +1,6 @@
 {
     "name": "jDialog",
-    "version": "0.0.1",
+    "version": "0.9.3",
     "main": "dist/jDialog.js",
     "author": {
         "name": "Just me"
@@ -11,6 +11,7 @@
         "gulp-concat-util": "latest",
         "gulp-sourcemaps": "latest",
         "gulp-yuidoc":"latest",
-        "gulp-docco":"latest"
+        "gulp-docco":"latest",
+        "gulp-less":"latest"
     }
 }

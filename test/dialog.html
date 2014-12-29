@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
     <title>jDialog</title>
     <link rel="stylesheet" href="http://cdn.staticfile.org/twitter-bootstrap/3.3.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="../src/dialog.css"/>
+    <link rel="stylesheet" href="../dist/dialog.css"/>
 </head>
 
 <body>
@@ -19,13 +19,13 @@
 
 <p><a class="btn btn-primary" href="javascript:;" onclick="testBed('test4')">多内容</a></p>
 
-
+<p><a class="btn btn-primary" href="javascript:;" onclick="jDialog.error('jDialog.error')">jDialog.error</a></p>
 
 <script src="../dist/jDialog.js"></script>
 <script>
     var handlerMapping = {
         test1: function () {
-            jDialog('一个普通的dialog');
+            jDialog('jDialog("Some messages")');
         },
         test2: function () {
             jDialog('确定要删除吗？', function () {
