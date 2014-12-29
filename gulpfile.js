@@ -4,6 +4,7 @@ var concat = require('gulp-concat-util');
 var sourcemaps = require('gulp-sourcemaps');
 var yuidoc = require('gulp-yuidoc');
 var docco = require("gulp-docco");
+var jshint = require('gulp-jshint');
 
 var less = require('gulp-less');
 
@@ -34,6 +35,21 @@ gulp.task('docs', function () {
     //    .pipe(docco())
     //    .pipe(gulp.dest('./docs/'));
 });
+
+gulp.task('lint',function(){
+   gulp.src(jsPath)
+       .pipe(jshint())
+       .pipe(jshint.reporter('default'));
+
+
+});
+
+
+//gulp.task('lint', function() {
+//    return gulp.src('./lib/*.js')
+//        .pipe(jshint())
+//        .pipe(jshint.reporter('YOUR_REPORTER_HERE'));
+//});
 
 gulp.task('less', function () {
     gulp.src(lessPath)

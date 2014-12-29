@@ -12,6 +12,7 @@
         "gulp-sourcemaps": "latest",
         "gulp-yuidoc":"latest",
         "gulp-docco":"latest",
-        "gulp-less":"latest"
+        "gulp-less":"latest",
+        "gulp-jshint":"latest"
     }
 }

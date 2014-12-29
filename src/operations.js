@@ -7,6 +7,7 @@ jDialog.fn.extend({
     renderDOM: function () {
 
         var wrapper = this.getWrapper();
+        var options = this.options;
 
         wrapper
             .appendChild(this.getHeader());
@@ -16,47 +17,66 @@ jDialog.fn.extend({
             .appendChild(this.getFooter());
 
         //
-        this.title(this.options.title)
-            .message(this.options.msg);
+        this.title(options.title)
+            .message(options.msg);
 
-        if (this.options.modal) {
+        if (options.modal) {
             this.showModal();
         }
 
-        if (this.options.callBack) {
-            //this.addButton('确定', 'apply', this.options.callBack);
+        if (options.callBack) {
+            this.addButton('确定', 'apply', options.callBack);
         }
 
         this.addButton('取消', 'destory', function () {
             this.destory();
         });
-
         wrapper.addEventListener('click', this.eventRouter.bind(this), false);
         doc.body.appendChild(wrapper);
-
-        // 计算位置
-        var clientHeight = doc.documentElement.clientHeight;
-        // 如果dialog的高度大于视口的高度
-        if (this.height() > clientHeight) {
-            this.height(clientHeight - 30);
-            this.getContainer().style.height =
-                this.height()
-                - (this.getHeader().offsetHeight + this.getFooter().offsetHeight)
-                + 'px';
-        } else {
-            this.height(this.height());
-        }
-        this.extend(wrapper.style, {
-            bottom: 0,
-            top: 0
-        });
-
-        this.toggleLockBody(true);
+        this.verticalInViewPort(options.fixed);
         return this;
     },
 
     /**
-     *
+     * 保证 position:fixed 的dialog永远处于视口内；
+     */
+    verticalInViewPort: function (isFixed) {
+        var docElement = doc.documentElement;
+        var clientHeight = docElement.clientHeight;
+        var dialogHeight = this.height();
+
+        if (isFixed) {
+
+            if (dialogHeight > clientHeight) {
+                dialogHeight = clientHeight - 30;
+                this.getContainer().style.height =
+                    dialogHeight - (this.getHeader().offsetHeight + this.getFooter().offsetHeight) + 'px';
+            }
+            this.height(dialogHeight)
+                .toggleLockBody(true)
+                .extend(this.getWrapper().style, {
+                    position: "fixed",
+                    bottom: 0,
+                    top: 0
+                });
+
+        } else {
+
+            var scrollTop = docElement.scrollTop;
+            var top = Math.max((clientHeight - dialogHeight) * 382 / 1000 + scrollTop, scrollTop);
+
+            this.top(top)
+                .height('auto')
+                .toggleLockBody(false)
+                .getContainer().style.height = "auto";
+
+        }
+
+        return this;
+    },
+
+    /**
+     * 锁住body的scroll，不让其滚动；
      * @param useLock
      */
     toggleLockBody: function (useLock) {
@@ -68,6 +88,7 @@ jDialog.fn.extend({
         }
         doc.body.style.height = height;
         doc.body.style.overflow = hiddenType;
+        return this;
     },
 
     /**

@@ -4,11 +4,11 @@
  * @returns {*}
  */
 var addPixelUnit = function (number) {
-    if (!/em|px|rem|pt|%/gi.test(number)) {
+    if (!/em|px|rem|pt|%|auto/gi.test(number)) {
         number = number + 'px';
     }
     return number;
-}
+};
 
 jDialog.fn.extend({
 
@@ -81,7 +81,7 @@ jDialog.fn.extend({
     },
 
     /**
-     *  返回当前的top值或者为dialog设置top
+     * 返回当前的top值或者为dialog设置top
      * @param value
      * @returns {*}
      */
@@ -91,6 +91,21 @@ jDialog.fn.extend({
         }
         this.wrapper.style.top = addPixelUnit(value);
         this.wrapper.style.bottom = "";
+        return this;
+    },
+
+    /**
+     * 相对于视口，还是相对于文档流
+     * @param useAbsolute
+     * @returns {*}
+     */
+    fixed: function (useAbsolute) {
+        if (!useAbsolute) {
+            this.getWrapper().style.position = "fixed";
+        } else {
+            this.getWrapper().style.position = "absolute";
+        }
+        this.verticalInViewPort(!useAbsolute);
         return this;
     }
 });

@@ -1,12 +1,11 @@
 var win = window;
 var doc = document;
-var event;
 var jDialog = function (message, callBack) {
     /**
      *
      */
     return new jDialog.fn.init(message, callBack);
-}
+};
 
 /**
  *
@@ -37,6 +36,7 @@ jDialog.fn = jDialog.prototype = {
              *  前缀在所有的dom结构上，均会被添加
              */
             prefix: "",
+            fixed: false,
             preventHide: false,
             callBack: null
         };
@@ -62,7 +62,7 @@ jDialog.fn = jDialog.prototype = {
         jDialog.currentDialog = this;
         return this;
     }
-}
+};
 
 /**
  * 浅copy
@@ -88,7 +88,7 @@ jDialog.extend = jDialog.fn.extend = function () {
     }
 
     return target;
-}
+};
 
 /**
  *

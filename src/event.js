@@ -38,4 +38,4 @@ jDialog.event = {
             }
         }
     }
-}
+};
