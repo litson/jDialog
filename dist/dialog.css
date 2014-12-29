@@ -1,0 +1,64 @@
+.dialog {
+  font: 14px/1.5em tahoma, 'Microsoft yahei', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #555;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  overflow: hidden;
+  width: 90%;
+  position: fixed;
+  margin: auto;
+  left: 0;
+  right: 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+.dialog *,
+.dialog *:before,
+.dialog *:after {
+  -webkit-box-sizing: border-box;
+}
+.dialog.dialog-toast {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: none;
+  color: #fff;
+}
+.dialog.dialog-error {
+  border-color: #ebccd1;
+}
+.dialog.dialog-error .dialog-header {
+  color: #a94442;
+  background-color: #f2dede;
+}
+.dialog.dialog-error .dialog-btn {
+  border-color: #ebccd1;
+}
+.dialog-header {
+  text-indent: 1em;
+  height: 3em;
+  line-height: 3em;
+  background-color: #f7f7f7;
+}
+.dialog-body {
+  padding: .5em;
+  word-break: break-all;
+  overflow-y: auto;
+}
+.dialog-footer {
+  display: -webkit-box;
+}
+.dialog-btn {
+  -webkit-box-flex: 1;
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  color: inherit;
+  padding: .8em 0;
+  margin: .8em;
+}
+.dialog-btn-primary {
+  border-color: #e94543;
+  color: #fff;
+  background-color: #e94543;
+}

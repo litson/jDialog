@@ -1,0 +1,84 @@
+.dialog {
+  font: 14px/1.5em tahoma, 'Microsoft yahei', "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #555;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  overflow: hidden;
+  width: 90%;;
+  position: fixed;
+  margin: auto;
+  left: 0;
+  right: 0;
+
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+
+  *, *:before, *:after {
+    -webkit-box-sizing: border-box;
+  }
+
+  // components
+  &.dialog-toast {
+    background-color: rgba(0, 0, 0, .4);
+    border: none;
+    color: #fff;
+  }
+  &.dialog-error {
+
+    border-color: #ebccd1;
+    .dialog-header {
+      color: #a94442;
+      background-color: #f2dede;
+    }
+
+    .dialog-btn {
+      border-color: #ebccd1;
+    }
+
+//    .dialog-btn-primary {
+//      color: #a94442;
+//      background-color: #f2dede;
+//    }
+  }
+}
+
+// header
+.dialog-header {
+  text-indent: 1em;
+  height: 3em;
+  line-height: 3em;
+  background-color: #f7f7f7;
+}
+
+// body
+.dialog-body {
+  padding: .5em;
+  word-break: break-all;
+  overflow-y: auto;
+}
+
+// footer
+.dialog-footer {
+  display: -webkit-box;
+}
+
+// buttons;
+.dialog-btn {
+  -webkit-box-flex: 1;
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  color: inherit;
+  padding: .8em 0;
+  margin: .8em;
+}
+
+// primary btn
+.dialog-btn-primary {
+  border-color: #e94543;
+  color: #fff;
+  background-color: #e94543;;
+}
+
