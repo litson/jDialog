@@ -1,4 +1,4 @@
-jDialog - a dialog is used like jQuery [![Built with Gulp](https://cdn.gruntjs.com/builtwith.png)](http://gulpjs.com/)
+jDialog - a dialog is used like jQuery
 ======
 
 ## Guides
@@ -42,13 +42,87 @@ jDialog - a dialog is used like jQuery [![Built with Gulp](https://cdn.gruntjs.c
 ```
 
 ## API
+<table>
+    <tr>
+        <th>名称</th>
+        <th>参数</th>
+        <th>说明</th>
+        <th>返回值</th>
+    </tr>
+    <tr>
+        <td>width()</td>
+        <td>[value](可选)</td>
+        <td>为当前dialog设置宽度 | 返回当前dialog的宽度</td>
+        <td>jDialog | Number</td>
+    </tr>
+    <tr>
+            <td>height()</td>
+            <td>[value](可选)</td>
+            <td>为当前dialog设置高度 | 返回当前dialog的高度</td>
+            <td>jDialog | Number</td>
+     </tr>
+     <tr>
+         <td>index()</td>
+         <td>[value](可选)</td>
+         <td>为当前dialog设置zIndex
+                <br>(并同时会为当前dialog的Modal设置zIndex[value-1])
+                <br>| 返回当前dialog的zIndex
+          </td>
+         <td>jDialog | Number</td>
+       </tr>
+       <tr>
+               <td>top()</td>
+               <td>[value](可选)</td>
+               <td>为当前dialog设置CSS top | 返回当前dialog的CSS top</td>
+               <td>jDialog | Number</td>
+        </tr>
+        <tr>
+               <td>message()</td>
+               <td>[value](可选)</td>
+               <td>为当前dialog设置message | 返回当前dialog配置的msg</td>
+               <td>jDialog | String | HTMLString</td>
+        </tr>
+        <tr>
+               <td>title()</td>
+               <td>[value](可选)</td>
+               <td>为当前dialog设置title | 返回当前dialog配置的title</td>
+               <td>jDialog | String </td>
+        </tr>
 
-### width()
+        <tr>
+               <td>getWrapper()</td>
+               <td></td>
+               <td>获取当前dialog的DOM结构</td>
+               <td>HTMLElement</td>
+        </tr>
 
-    * width( value ) @Returns: jDialog
-        为dialog设置CSS width ，可以是Number，百分比、em、pt、rem等；
-        没有单位默认为pixel；
-    * width()           @Returns: Number
-        返回dialog的offsetWidth
+        <tr>
+               <td>getHeader()</td>
+               <td></td>
+               <td>获取当前dialog页头的DOM结构</td>
+               <td>HTMLElement</td>
+        </tr>
+        <tr>
+               <td>hideHeader()</td>
+               <td></td>
+               <td>隐藏当前dialog的页头</td>
+               <td>jDialog</td>
+        </tr>
+
+         <tr>
+               <td>getFooter()</td>
+               <td></td>
+               <td>获取当前dialog页尾的DOM结构</td>
+               <td>HTMLElement</td>
+        </tr>
+        
+        <tr>
+               <td>hideFooter()</td>
+               <td></td>
+               <td>隐藏当前dialog的页尾</td>
+               <td>jDialog</td>
+        </tr>
+</table>
 
 ## Questions?
+
