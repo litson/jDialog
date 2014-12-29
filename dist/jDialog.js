@@ -2,7 +2,7 @@
 ;(function (window, document) {
 
 
-/* concat from'/Users/litsonzhang/workspace/jDialog/src/core.js' */
+/* concat from'\src\core.js' */
 var win = window;
 var doc = document;
 var jDialog = function (message, callBack) {
@@ -97,7 +97,7 @@ jDialog.extend = jDialog.fn.extend = function () {
  */
 jDialog.fn.init.prototype = jDialog.fn;
 
-/* concat from'/Users/litsonzhang/workspace/jDialog/src/helper.js' */
+/* concat from'\src\helper.js' */
 jDialog.fn.extend({
 
     /**
@@ -122,7 +122,7 @@ jDialog.fn.extend({
     }
 });
 
-/* concat from'/Users/litsonzhang/workspace/jDialog/src/event.js' */
+/* concat from'\src\event.js' */
 jDialog.fn.extend({
 
     /**
@@ -169,7 +169,7 @@ jDialog.fn.extend({
     }
 });
 
-/* concat from'/Users/litsonzhang/workspace/jDialog/src/operations.js' */
+/* concat from'\src\operations.js' */
 jDialog.fn.extend({
 
     /**
@@ -489,7 +489,7 @@ jDialog.fn.extend({
     }
 });
 
-/* concat from'/Users/litsonzhang/workspace/jDialog/src/setting.js' */
+/* concat from'\src\setting.js' */
 /**
  *
  * @param number
@@ -586,7 +586,7 @@ jDialog.fn.extend({
     }
 });
 
-/* concat from'/Users/litsonzhang/workspace/jDialog/src/components.js' */
+/* concat from'\src\components.js' */
 /**
  *
  */
