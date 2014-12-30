@@ -1,41 +1,86 @@
+/**
+ *
+ * @param jDialog
+ * @private
+ */
+function _renderDOM(jDialog) {
+    var self = jDialog;
+    var wrapper = self.getWrapper();
+    var options = self.options;
+    wrapper
+        .appendChild(self.getHeader());
+    wrapper
+        .appendChild(self.getContainer());
+    wrapper
+        .appendChild(self.getFooter());
+    //
+    self.title(options.title)
+        .content(options.content);
+    //
+    if (options.modal) {
+        self.showModal();
+    }
+    //
+    if (options.callBack) {
+        self.addButton('确定', 'apply', options.callBack);
+    }
+    //
+    self.addButton('取消', 'destory', function () {
+        self.destory();
+    });
+    wrapper.addEventListener('click', _eventRouter.bind(self), false);
+    doc.body.appendChild(wrapper);
+    self.verticalInViewPort(options.fixed);
+    return self;
+};
+
+/**
+ *
+ * @param tagName
+ * @param attrs
+ * @returns {HTMLElement}
+ * @private
+ */
+function _createElement(tagName, attrs) {
+    var element = doc.createElement(tagName);
+    jDialog.extend(element, attrs);
+    return element;
+};
+
+/**
+ *
+ * @param event
+ * @private
+ */
+function _eventRouter(event) {
+    var target = event.target;
+    var actionName = target.getAttribute('data-dialog-action');
+    if (!actionName) {
+        return;
+    }
+    jDialog.event.fire(actionName);
+};
+
+/**
+ *
+ * @param context
+ * @returns {HTMLElement}
+ * @private
+ */
+function _createModal(context) {
+    var self = context;
+    var element = _createElement('div');
+    element.style.cssText = ";background:rgba(0,0,0,0.3);width:100%;"
+    + "height:100%;position:fixed;left:0;top:0;z-index:"
+    + (self.currentDOMIndex - 1);
+    element.onclick = function () {
+        jDialog.event.fire('destory');
+    }.bind(self);
+    doc.body.appendChild(element);
+    return element;
+}
+
 jDialog.fn.extend({
-
-    /**
-     *
-     * @returns {*}
-     */
-    renderDOM: function () {
-
-        var wrapper = this.getWrapper();
-        var options = this.options;
-
-        wrapper
-            .appendChild(this.getHeader());
-        wrapper
-            .appendChild(this.getContainer());
-        wrapper
-            .appendChild(this.getFooter());
-
-        //
-        this.title(options.title)
-            .content(options.content);
-
-        if (options.modal) {
-            this.showModal();
-        }
-
-        if (options.callBack) {
-            this.addButton('确定', 'apply', options.callBack);
-        }
-
-        this.addButton('取消', 'destory', function () {
-            this.destory();
-        });
-        wrapper.addEventListener('click', this.eventRouter.bind(this), false);
-        doc.body.appendChild(wrapper);
-        this.verticalInViewPort(options.fixed);
-        return this;
-    },
 
     /**
      * 保证 position:fixed 的dialog永远处于视口内；
@@ -92,39 +137,13 @@ jDialog.fn.extend({
     },
 
     /**
-     *
-     * @param event
-     */
-    eventRouter: function (event) {
-        var target = event.target;
-        var actionName = target.getAttribute('data-dialog-action');
-        if (!actionName) {
-            return;
-        }
-        jDialog.event.fire(actionName);
-    },
-
-    /**
-     *
-     * @param tagName
-     * @param attrs
-     * @returns {HTMLElement}
-     * @private
-     */
-    _createElement: function (tagName, attrs) {
-        var element = doc.createElement(tagName);
-        this.extend(element, attrs);
-        return element;
-    },
-
-    /**
      *  获取dialog的DOM结构
      * @returns {HTMLElement|*|wrapper}
      */
     getWrapper: function () {
         if (!this.wrapper) {
             var prefix = this.options.prefix;
-            this.wrapper = this._createElement('div', {
+            this.wrapper = _createElement('div', {
                 className: prefix + 'dialog'
             });
 
@@ -141,7 +160,7 @@ jDialog.fn.extend({
     getHeader: function () {
         if (!this.header) {
             var prefix = this.options.prefix;
-            this.header = this._createElement('div', {
+            this.header = _createElement('div', {
                 className: prefix + 'dialog-header'
             });
         }
@@ -167,7 +186,7 @@ jDialog.fn.extend({
     getContainer: function () {
         if (!this.container) {
             var prefix = this.options.prefix;
-            this.container = this._createElement('div', {
+            this.container = _createElement('div', {
                 className: prefix + 'dialog-body'
             });
         }
@@ -181,7 +200,7 @@ jDialog.fn.extend({
     getFooter: function () {
         if (!this.footer) {
             var prefix = this.options.prefix;
-            this.footer = this._createElement('div', {
+            this.footer = _createElement('div', {
                 className: prefix + 'dialog-footer'
             });
         }
@@ -209,7 +228,7 @@ jDialog.fn.extend({
      */
     addButton: function (text, actionName, handler) {
         var prefix = this.options.prefix;
-        var element = this._createElement('a', {
+        var element = _createElement('a', {
             href: 'javascript:;',
             className: prefix + 'dialog-btn',
             innerHTML: text || '按钮'
@@ -291,7 +310,7 @@ jDialog.fn.extend({
      */
     destory: function () {
         if (this.wrapper) {
-            this.wrapper.removeEventListener('click', this.eventRouter, false);
+            this.wrapper.removeEventListener('click', _eventRouter, false);
             doc.body.removeChild(this.wrapper);
         }
         if (this.modal) {
@@ -303,26 +322,12 @@ jDialog.fn.extend({
     },
 
     /**
-     *
-     * @returns {HTMLElement}
-     */
-    createModal: function () {
-        var element = this._createElement('div');
-        element.style.cssText = ";background:rgba(0,0,0,0.3);width:100%;" + "height:100%;position:fixed;left:0;top:0;z-index:" + (this.currentDOMIndex - 1);
-        element.onclick = function () {
-            //jDialog.event.fire('destory');
-        }.bind(this);
-        doc.body.appendChild(element);
-        return element;
-    },
-
-    /**
      * 获取当前dialog的Modal的DOM结构
      * @returns {modal|*}
      */
     getModal: function () {
         if (!this.modal) {
-            this.modal = this.createModal();
+            this.modal = _createModal(this);
         }
         return this.modal;
     },

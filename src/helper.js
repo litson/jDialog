@@ -1,4 +1,4 @@
-jDialog.fn.extend({
+jDialog.extend({
     /**
      * is function
      * @param fn

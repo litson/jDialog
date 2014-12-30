@@ -1,5 +1,6 @@
 var win = window;
 var doc = document;
+var version = "0.9.4";
 var jDialog = function (message, callBack) {
     /**
      *
@@ -13,7 +14,7 @@ var jDialog = function (message, callBack) {
  */
 jDialog.fn = jDialog.prototype = {
     constructor: jDialog,
-    version: '0.9.3',
+    version: version,
     /**
      * @method init
      * @param message
@@ -36,26 +37,26 @@ jDialog.fn = jDialog.prototype = {
              *  前缀在所有的dom结构上，均会被添加
              */
             prefix: "",
-            fixed: false,
+            fixed: true,
             preventHide: false,
             callBack: null,
             // iframe
             url: null
         };
 
-        if (this.isPlainObject(message)) {
+        if (jDialog.isPlainObject(message)) {
             this.extend(this.options, message);
 
         } else if (/string|number|boolean/gi.test(typeof(message))) {
             this.options.content = message;
-            if (this.isFunction(callBack)) {
+            if (jDialog.isFunction(callBack)) {
                 this.options.callBack = callBack;
             }
         }
 
         this.actions = {};
         jDialog.event.root = this;
-        this.renderDOM();
+        _renderDOM(this);
 
         // 只存活一个dialog
         if (jDialog.currentDialog) {
