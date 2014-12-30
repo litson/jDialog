@@ -7,7 +7,15 @@ var docco = require("gulp-docco");
 var jshint = require('gulp-jshint');
 var less = require('gulp-less');
 
-var jsFiles = ['core.js', 'helper.js', 'event.js', 'operations.js', 'setting.js', 'components.js'];
+var jsFiles =
+    ['core.js'
+        , 'helper.js'
+        , 'event.js'
+        , 'operations.js'
+        , 'setting.js'
+        , 'components.js',
+        'compatibleAMD.js'];
+
 var lessPath = './src/*.less';
 var distPath = './dist/';
 
@@ -49,14 +57,15 @@ gulp.task('less', function () {
 gulp.task('concat', function () {
 
     var fileHeader = '\n;(function (window, document) {\n\n';
-    var fileFooter = '\n\n window.jDialog = jDialog;\n})(window, window.document);\n';
+    var fileFooter = '\n\n})(window, window.document);\n';
 
     gulp.src(jsPath)
         .pipe(sourcemaps.init())
         .pipe(concat('jDialog.js', {
             process: function (src) {
-                var pathComments = "\n/* concat from'" + this.path.replace(__dirname, "") + "' */\n"
-                return pathComments + src.trim();
+                var pathComments = "\n/* concat from'" + this.path.replace(__dirname, "") + "' */\n";
+                var src = pathComments + src.trim();
+                return src.replace(/\n/g, "\n    ");
             }
         }))
         .pipe(concat.header(fileHeader))

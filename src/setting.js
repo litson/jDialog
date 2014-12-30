@@ -1,5 +1,5 @@
 /**
- *  设置类函数集
+ *  设置函数集
  * @param number
  * @returns {*}
  */

@@ -192,4 +192,4 @@ jDialog - a dialog is used like jQuery
     </tr>
 </table>
 ## Questions?
-
+[Open issues](https://github.com/litson/jDialog/issues/new)
