@@ -48,7 +48,7 @@ jDialog.fn = jDialog.prototype = {
         };
 
         if (jDialog.isPlainObject(message)) {
-            this.extend(this.options, message);
+            jDialog.extend(this.options, message);
 
         } else if (/string|number|boolean/gi.test(typeof(message))) {
             this.options.content = message;

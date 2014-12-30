@@ -21,7 +21,7 @@ function _renderDOM(jDialog) {
         .appendChild(self.getFooter());
 
     //
-    var content;
+    var content = options.content;
     if (options.url) {
         var clientHeight = doc.documentElement.clientHeight;
         content = '<iframe style="width: 100%" height="'
@@ -268,14 +268,18 @@ jDialog.fn.extend({
      * @param className
      * @returns {*}
      */
-    addClass: function (className) {
+    addClass: function (className, context) {
         // 自动补齐前缀
         //var prefix = this.options.prefix;
         //var reg = new RegExp('^' + prefix, 'gi');
         //if (!reg.test(className)) {
         //    className = prefix + className;
         //}
-        this.getWrapper().classList.add(className);
+        var context = context || this.getWrapper();
+        if (context.nodeType === 1
+            && typeof className === 'string') {
+            context.classList.add(className);
+        }
         return this;
     },
 
@@ -283,13 +287,18 @@ jDialog.fn.extend({
      * 为当前dialog添加remove
      * @param className
      */
-    removeClass: function (className) {
+    removeClass: function (className, context) {
         //var prefix = this.options.prefix;
         //var reg = new RegExp('^' + prefix, 'gi');
         //if (!reg.test(className)) {
         //    className = prefix + className;
         //}
-        this.getWrapper().classList.remove(className);
+        var context = context || this.getWrapper();
+        if (context.nodeType === 1
+            && typeof className === 'string') {
+            context.classList.remove(className);
+        }
+        return this;
     },
 
     /**

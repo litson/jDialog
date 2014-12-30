@@ -22,7 +22,12 @@ jDialog.event = {
     },
     has: function (actionName) {
         var self = this.root;
-        return self.actions[actionName] && (self.actions[actionName] ? true : false);
+        if (self.constructor != jDialog
+            || typeof actionName !== 'string'
+            || !self.actions[actionName]) {
+            return false;
+        }
+        return true;
     },
     fire: function (actionName) {
         var self = this.root;
