@@ -18,7 +18,7 @@ jDialog.fn.extend({
 
         //
         this.title(options.title)
-            .message(options.msg);
+            .content(options.content);
 
         if (options.modal) {
             this.showModal();

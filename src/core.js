@@ -28,7 +28,7 @@ jDialog.fn = jDialog.prototype = {
         this.options = {
             title: '提示',          // title
             modal: true,        //是否启用模式窗口
-            msg: '',                // messages
+            content: '',                // messages
             autoHide: 0,        // 自动销毁
             /**
              *  对话框class前缀，默认无
@@ -38,14 +38,16 @@ jDialog.fn = jDialog.prototype = {
             prefix: "",
             fixed: false,
             preventHide: false,
-            callBack: null
+            callBack: null,
+            // iframe
+            url: null
         };
 
         if (this.isPlainObject(message)) {
             this.extend(this.options, message);
 
         } else if (/string|number|boolean/gi.test(typeof(message))) {
-            this.options.msg = message;
+            this.options.content = message;
             if (this.isFunction(callBack)) {
                 this.options.callBack = callBack;
             }

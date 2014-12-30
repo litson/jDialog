@@ -26,13 +26,13 @@ jDialog.fn.extend({
     },
 
     /**
-     * 返回当前设置的message或设置message
+     * 返回当前设置的content或设置content
      * @param value
      * @returns {*}
      */
-    message: function (value) {
+    content: function (value) {
         if (value === undefined) {
-            return this.options.msg;
+            return this.options.content;
         }
         this.getContainer().innerHTML = value;
         return this;
