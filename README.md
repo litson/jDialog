@@ -86,9 +86,9 @@ jDialog - a dialog is used like jQuery
         <td>jDialog | Number</td>
     </tr>
     <tr>
-        <td>message()</td>
+        <td>content()</td>
         <td>[value](可选)</td>
-        <td>为当前dialog设置message | 返回当前dialog配置的msg</td>
+        <td>为当前dialog设置content | 返回当前dialog配置的content</td>
         <td>jDialog | String | HTMLString</td>
     </tr>
     <tr>
@@ -149,6 +149,45 @@ jDialog - a dialog is used like jQuery
         <td>destory()</td>
         <td></td>
         <td>销毁当前dialog</td>
+        <td>jDialog</td>
+    </tr>
+    <tr>
+        <td>addClass()</td>
+        <td>value</td>
+        <td>为当前dialog添加样式</td>
+        <td>jDialog</td>
+    </tr>
+    <tr>
+        <td>removeClass()</td>
+        <td>value</td>
+        <td>为当前dialog移除样式</td>
+        <td>jDialog</td>
+    </tr>
+    <tr>
+        <td>preventHide()</td>
+        <td></td>
+        <td>点击modal不会自动销毁dialog</td>
+        <td>jDialog</td>
+    </tr>
+    <tr>
+        <td>verticalInViewPort()</td>
+        <td>useFixed</td>
+        <td>
+                调整dialog盒模型定位基准；fixed 或 absolute
+                <br/>
+                设置为fixed则会限定dialog的高度
+                <br/>
+                设置为absolute时会移除高度的限定
+           </td>
+        <td>jDialog</td>
+    </tr>
+    <tr>
+        <td>toggleLockBody()</td>
+        <td>useLock</td>
+        <td>
+               锁住body的滚动
+               移除body的滚动
+           </td>
         <td>jDialog</td>
     </tr>
 </table>

@@ -18,7 +18,7 @@ jDialog.fn.extend({
      * @returns {*}
      */
     title: function (value) {
-        if (value === undefined) {
+        if (typeof value === 'undefined') {
             return this.options.title;
         }
         this.getHeader().innerHTML = value;
@@ -90,7 +90,7 @@ jDialog.fn.extend({
             return win.getComputedStyle(this.getWrapper()).top;
         }
         this.wrapper.style.top = addPixelUnit(value);
-        this.wrapper.style.bottom = "";
+        this.wrapper.style.bottom = '';
         return this;
     },
 
@@ -101,11 +101,18 @@ jDialog.fn.extend({
      */
     fixed: function (useAbsolute) {
         if (!useAbsolute) {
-            this.getWrapper().style.position = "fixed";
+            this.getWrapper().style.position = 'fixed';
         } else {
-            this.getWrapper().style.position = "absolute";
+            this.getWrapper().style.position = 'absolute';
         }
         this.verticalInViewPort(!useAbsolute);
+        return this;
+    },
+    /**
+     *
+     */
+    preventHide: function () {
+        this.options.preventHide = true;
         return this;
     }
 });

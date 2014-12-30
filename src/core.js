@@ -1,6 +1,6 @@
 var win = window;
 var doc = document;
-var version = "0.9.4";
+var version = '0.9.4';
 var jDialog = function (message, callBack) {
     /**
      *
@@ -36,8 +36,11 @@ jDialog.fn = jDialog.prototype = {
              *  强制使用BEM规范
              *  前缀在所有的dom结构上，均会被添加
              */
-            prefix: "",
+            prefix: '',
             fixed: true,
+            /**
+             *  点击modal不再隐藏
+             */
             preventHide: false,
             callBack: null,
             // iframe

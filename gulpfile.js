@@ -5,11 +5,9 @@ var sourcemaps = require('gulp-sourcemaps');
 var yuidoc = require('gulp-yuidoc');
 var docco = require("gulp-docco");
 var jshint = require('gulp-jshint');
-
 var less = require('gulp-less');
 
-
-var jsPath = ['core.js', 'helper.js', 'event.js', 'operations.js', 'setting.js', 'components.js'];
+var jsFiles = ['core.js', 'helper.js', 'event.js', 'operations.js', 'setting.js', 'components.js'];
 var lessPath = './src/*.less';
 var distPath = './dist/';
 
@@ -22,7 +20,7 @@ function addPrefixToEachItem(prefix, items) {
 
     return items;
 }
-jsPath = addPrefixToEachItem('./src/', jsPath);
+var jsPath = addPrefixToEachItem('./src/', jsFiles);
 
 // todo:文档生成
 gulp.task('docs', function () {
@@ -36,20 +34,11 @@ gulp.task('docs', function () {
     //    .pipe(gulp.dest('./docs/'));
 });
 
-gulp.task('lint',function(){
-   gulp.src(jsPath)
-       .pipe(jshint())
-       .pipe(jshint.reporter('default'));
-
-
+gulp.task('lint', function () {
+    gulp.src(jsPath)
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
 });
-
-
-//gulp.task('lint', function() {
-//    return gulp.src('./lib/*.js')
-//        .pipe(jshint())
-//        .pipe(jshint.reporter('YOUR_REPORTER_HERE'));
-//});
 
 gulp.task('less', function () {
     gulp.src(lessPath)

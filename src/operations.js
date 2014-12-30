@@ -7,15 +7,32 @@ function _renderDOM(jDialog) {
     var self = jDialog;
     var wrapper = self.getWrapper();
     var options = self.options;
-    wrapper
-        .appendChild(self.getHeader());
+
+    // 没有title信息，则不显示header；
+    if (self.title() !== '') {
+        wrapper
+            .appendChild(self.getHeader());
+        self.title(options.title);
+    }
+
     wrapper
         .appendChild(self.getContainer());
     wrapper
         .appendChild(self.getFooter());
+
     //
-    self.title(options.title)
-        .content(options.content);
+    var content;
+    if (options.url) {
+        var clientHeight = doc.documentElement.clientHeight;
+        content = '<iframe style="width: 100%" height="'
+        + clientHeight
+        + '" frameborder="0" src="'
+        + options.url
+        + '"></iframe>';
+    }
+    self.content(content);
+
+
     //
     if (options.modal) {
         self.showModal();
@@ -70,12 +87,14 @@ function _eventRouter(event) {
 function _createModal(context) {
     var self = context;
     var element = _createElement('div');
-    element.style.cssText = ";background:rgba(0,0,0,0.3);width:100%;"
-    + "height:100%;position:fixed;left:0;top:0;z-index:"
+    element.style.cssText = ';background:rgba(0,0,0,0.3);width:100%;'
+    + 'height:100%;position:fixed;left:0;top:0;z-index:'
     + (self.currentDOMIndex - 1);
     element.onclick = function () {
-        jDialog.event.fire('destory');
-    }.bind(self);
+        if (!self.options.preventHide) {
+            jDialog.event.fire('destory');
+        }
+    };
     doc.body.appendChild(element);
     return element;
 }
@@ -85,12 +104,12 @@ jDialog.fn.extend({
     /**
      * 保证 position:fixed 的dialog永远处于视口内；
      */
-    verticalInViewPort: function (isFixed) {
+    verticalInViewPort: function (useFixed) {
         var docElement = doc.documentElement;
         var clientHeight = docElement.clientHeight;
         var dialogHeight = this.height();
 
-        if (isFixed) {
+        if (useFixed) {
 
             if (dialogHeight > clientHeight) {
                 dialogHeight = clientHeight - 30;
@@ -100,7 +119,7 @@ jDialog.fn.extend({
             this.height(dialogHeight)
                 .toggleLockBody(true)
                 .extend(this.getWrapper().style, {
-                    position: "fixed",
+                    position: 'fixed',
                     bottom: 0,
                     top: 0
                 });
@@ -113,7 +132,7 @@ jDialog.fn.extend({
             this.top(top)
                 .height('auto')
                 .toggleLockBody(false)
-                .getContainer().style.height = "auto";
+                .getContainer().style.height = 'auto';
 
         }
 
@@ -125,11 +144,11 @@ jDialog.fn.extend({
      * @param useLock
      */
     toggleLockBody: function (useLock) {
-        var height = "";
-        var hiddenType = "";
+        var height = '';
+        var hiddenType = '';
         if (useLock) {
-            height = "100%";
-            hiddenType = "hidden";
+            height = '100%';
+            hiddenType = 'hidden';
         }
         doc.body.style.height = height;
         doc.body.style.overflow = hiddenType;
@@ -220,7 +239,9 @@ jDialog.fn.extend({
     },
 
     /**
-     *
+     * 关于添加按钮及事件的模块，
+     * 现在很不灵活。。。
+     * @method addButton
      * @param text
      * @param actionName
      * @param handler
@@ -312,6 +333,7 @@ jDialog.fn.extend({
             doc.body.removeChild(this.wrapper);
         }
         if (this.modal) {
+            this.modal.onclick = null;
             doc.body.removeChild(this.modal);
         }
         this.toggleLockBody(false);

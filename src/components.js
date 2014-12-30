@@ -7,7 +7,7 @@ jDialog.extend({
     },
     toast: function (message, delay) {
         var dialog = jDialog(message);
-        dialog.getContainer().style.textAlign = "center";
+        dialog.getContainer().style.textAlign = 'center';
         dialog
             .hideFooter()
             .hideHeader()
