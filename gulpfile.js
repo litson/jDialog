@@ -6,6 +6,7 @@ var yuidoc = require('gulp-yuidoc');
 var docco = require("gulp-docco");
 var jshint = require('gulp-jshint');
 var less = require('gulp-less');
+var autoprefixer = require('gulp-autoprefixer');
 
 var jsFiles =
     ['core.js'
@@ -52,6 +53,14 @@ gulp.task('less', function () {
     gulp.src(lessPath)
         .pipe(less())
         .pipe(gulp.dest(distPath));
+});
+
+gulp.task('ap', function () {
+    gulp.src(distPath + "*.css").pipe(autoprefixer({
+        //browsers: [> 1%, last 2 versions],
+        cascade: true,
+        remove: true
+    })).pipe(gulp.dest(distPath));
 });
 
 gulp.task('concat', function () {

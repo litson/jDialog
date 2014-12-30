@@ -214,7 +214,6 @@
         }
         self.content(content);
     
-    
         //
         if (options.modal) {
             self.showModal();
@@ -229,7 +228,9 @@
         });
         wrapper.addEventListener('click', _eventRouter.bind(self), false);
         doc.body.appendChild(wrapper);
-        self.verticalInViewPort(options.fixed);
+    
+        self.verticalInViewPort(options.fixed)
+            .addClass('dialog-zoom-in');
         return self;
     };
     
