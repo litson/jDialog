@@ -280,14 +280,12 @@ jDialog.fn.extend({
 
         // 0则自动销毁；
         if (delay == 0) {
-            this.destory();
-            return this;
+            return this.destory();
         }
 
         //
         if (delay === undefined) {
-            this.autoHide(this.options.autoHide);
-            return this;
+            return this.autoHide(this.options.autoHide);
         }
 
         // 将会已最新的delay为准

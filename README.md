@@ -21,6 +21,15 @@ jDialog - a dialog is used like jQuery
         autoHide:3  // 3s后自动
     });
 
+    // 提供了部分“插件”
+    // alert
+    jDialog.alert(' hello! ');
+
+    // error
+    jDialog.error(' error msg ');
+
+    // toast
+    jDialog.toast(' some text ');
 
 ```
 ## Options
