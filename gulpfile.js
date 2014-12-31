@@ -98,4 +98,4 @@ gulp.task('watch', function () {
 
 });
 
-gulp.task('default', ['concat', 'less', 'watch']);
+gulp.task('default', ['concat', 'less', 'ap', 'watch']);
