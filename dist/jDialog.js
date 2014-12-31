@@ -13,13 +13,9 @@
         return new jDialog.fn.init(message, callBack);
     };
     
-    /**
-     *
-     * @type {{constructor: Function, init: Function}}
-     */
+    
     jDialog.fn = jDialog.prototype = {
         constructor: jDialog,
-        version: version,
         /**
          * @method init
          * @param message
@@ -63,6 +59,7 @@
             }
     
             this.actions = {};
+            this.buttons = [];
             jDialog.event.root = this;
             _renderDOM(this);
     
@@ -128,7 +125,12 @@
                 return false;
             }
             return obj.constructor == {}.constructor;
-        }
+        },
+    
+        /**
+         * 顶级缓存对象，目前没什么用
+         */
+        expando: "jDialog" + (version + Math.random()).replace(/\D/g, '')
     });
 
     /* concat from'\src\event.js' */
@@ -431,18 +433,38 @@
          * @returns {*}
          */
         addButton: function (text, actionName, handler) {
+            // 模拟重载
+            var fnKey = ("jDialog" + Math.random()).replace(/\D/g, '');
+            // 如果第一个参数是一个function
+            if (jDialog.isFunction(text)) {
+                return this.addButton('取消', actionName, text);
+            }
+    
+            if (jDialog.isFunction(actionName)) {
+                return this.addButton(text, fnKey, actionName);
+            }
+    
             var prefix = this.options.prefix;
             var element = _createElement('a', {
                 href: 'javascript:;',
                 className: prefix + 'dialog-btn',
-                innerHTML: text || '按钮'
+                innerHTML: text || "取消"
             });
-            if (actionName) {
-                element.setAttribute('data-dialog-action', actionName);
+    
+            if (!actionName) {
+                actionName = "destory";
+            } else {
                 jDialog.event.add(actionName, handler);
             }
-            //
-            this.getFooter().appendChild(element);
+            element.setAttribute('data-dialog-action', actionName);
+    
+            var footer = this.getFooter();
+            if (this.buttons.length) {
+                footer.insertBefore(element, footer.childNodes.item(0));
+            } else {
+                footer.appendChild(element);
+            }
+            this.buttons.push(element);
             return this;
         },
     

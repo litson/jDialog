@@ -18,5 +18,10 @@ jDialog.extend({
             return false;
         }
         return obj.constructor == {}.constructor;
-    }
+    },
+
+    /**
+     * 顶级缓存对象，目前没什么用
+     */
+    expando: "jDialog" + (version + Math.random()).replace(/\D/g, '')
 });

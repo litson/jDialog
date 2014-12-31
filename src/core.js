@@ -8,13 +8,9 @@ var jDialog = function (message, callBack) {
     return new jDialog.fn.init(message, callBack);
 };
 
-/**
- *
- * @type {{constructor: Function, init: Function}}
- */
+
 jDialog.fn = jDialog.prototype = {
     constructor: jDialog,
-    version: version,
     /**
      * @method init
      * @param message
@@ -58,6 +54,7 @@ jDialog.fn = jDialog.prototype = {
         }
 
         this.actions = {};
+        this.buttons = [];
         jDialog.event.root = this;
         _renderDOM(this);
 
