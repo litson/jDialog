@@ -1,4 +1,4 @@
-jDialog - a dialog is used like jQuery
+jDialog - 使用起来就像jQuery一样
 ======
 
 ## Guides
@@ -8,7 +8,7 @@ jDialog - a dialog is used like jQuery
 ## Usage
 ```js
 
-    // 我们可以直接生产一个带有“取消”按钮的对话框
+    // 我们可以直接生成一个带有“取消”按钮的对话框
     jDialog('Hello world!');
 
     // 也可以这样模拟一个confirm
@@ -19,7 +19,7 @@ jDialog - a dialog is used like jQuery
     // 也可以做详细配置
     jDialog({
         modal:false, // 一个不带模式窗口的dialog
-        autoHide:3  // 3s后自动
+        autoHide:3  // 3s后自动销毁
     });
 
     // 提供了部分“插件”
@@ -32,24 +32,56 @@ jDialog - a dialog is used like jQuery
     // toast
     jDialog.toast(' some text ');
 
+
 ```
-## Options
+### 如何添加按钮？
+
 ```js
 
-    jDialog({
-
-            title: '提示',                  // [String]     dialog 的 title
-            modal: true,                // [Boolean]  是否启用模式窗口
-            msg: '',                        // [HTMLstring | string]      需要显示的信息
-            autoHide: 0,                // [Number]    自动销毁，单位（s）
-            preventHide: false,      //  [Boolean]    尚未实现
-            callBack: null               //  [Function]   这里和events系统是重头，
-                                              //  但目前没有太好的想法
-
+    var dialog = jDialog.alert('按钮');
+    
+    // 我们可以很轻松的添加一个自定义按钮
+    dialog.addButton('宽度变为100', 'resetWidth', function(){
+        this.width(100); // 点击按钮时，会将dialog的宽度设置为100；
     });
+    
+    // actionName参数的作用? 提供一个可操作的句柄，
+    // 所以，我们可以在外面做这样的事情：
+    jDialog.event.fire('resetWidth');
+    
+    // 所以也可以:
+    jDialog.event.add('resetWidth',function(){
+        alert('您修改了dialog的宽度'); 
+    });
+    
+    //当我们点击这个按钮，结果为width被设置为100px，并且弹出alert；
+    
+```
+
+当然还有懒人模式
+```js
+    
+    // 
+    dialog.addButton('一个按钮',function(){
+        this.content('一个按钮');
+    });
+    
+    // 添加一个自定义事件的确定按钮
+    dialog.addButton(function(){
+        this.content('这个按钮做了操作');
+    });
+
+    // 或者干脆
+    dialog.addButton();
+    
+    
+    
 
 
 ```
+
+
+## Options
 
 ## API
 <table>
