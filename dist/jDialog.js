@@ -424,8 +424,7 @@
         },
     
         /**
-         * 关于添加按钮及事件的模块，
-         * 现在很不灵活。。。
+         * 添加按钮及事件
          * @method addButton
          * @param text
          * @param actionName
@@ -435,9 +434,10 @@
         addButton: function (text, actionName, handler) {
             // 模拟重载
             var fnKey = ("jDialog" + Math.random()).replace(/\D/g, '');
+            var defaultText = '确定';
             // 如果第一个参数是一个function
             if (jDialog.isFunction(text)) {
-                return this.addButton('取消', actionName, text);
+                return this.addButton(defaultText, actionName || fnKey, text);
             }
     
             if (jDialog.isFunction(actionName)) {
@@ -448,7 +448,7 @@
             var element = _createElement('a', {
                 href: 'javascript:;',
                 className: prefix + 'dialog-btn',
-                innerHTML: text || "取消"
+                innerHTML: text || defaultText
             });
     
             if (!actionName) {
@@ -460,6 +460,7 @@
     
             var footer = this.getFooter();
             if (this.buttons.length) {
+                this.addClass("dialog-btn-primary", element);
                 footer.insertBefore(element, footer.childNodes.item(0));
             } else {
                 footer.appendChild(element);

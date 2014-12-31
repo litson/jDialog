@@ -2,7 +2,8 @@ jDialog - a dialog is used like jQuery
 ======
 
 ## Guides
-> jDialog是参照jQuery核心原理，摒弃丑陋的 new 关键字，支持像jQuery扩展一样自定义属于你的dialog
+> jDialog是参照jQuery核心原理，摒弃丑陋的 new 关键字，
+    支持像jQuery扩展一样自定义属于你的dialog
 
 ## Usage
 ```js
@@ -163,6 +164,12 @@ jDialog - a dialog is used like jQuery
         <td>为当前dialog移除样式</td>
         <td>jDialog</td>
     </tr>
+    <tr>
+            <td>addButton()</td>
+            <td>[text,actionName,handler]</td>
+            <td>为当前dialog添加按钮<br/></td>
+            <td>jDialog</td>
+        </tr>
     <tr>
         <td>preventHide()</td>
         <td></td>
