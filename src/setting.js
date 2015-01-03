@@ -3,7 +3,7 @@
  * @param number
  * @returns {*}
  */
-var addPixelUnit = function (number) {
+var addPixelUnit = function(number) {
     if (!/em|px|rem|pt|%|auto/gi.test(number)) {
         number = number + 'px';
     }
@@ -17,11 +17,12 @@ jDialog.fn.extend({
      * @param text
      * @returns {*}
      */
-    title: function (value) {
+    title: function(value) {
         if (typeof value === 'undefined') {
             return this.options.title;
         }
-        this.getHeader().innerHTML = value;
+
+        this.getHeader().innerHTML = this.options.title = value;
         return this;
     },
 
@@ -30,11 +31,11 @@ jDialog.fn.extend({
      * @param value
      * @returns {*}
      */
-    content: function (value) {
+    content: function(value) {
         if (value === undefined) {
             return this.options.content;
         }
-        this.getContainer().innerHTML = value;
+        this.getContainer().innerHTML = this.options.content = value;
         return this;
     },
 
@@ -43,10 +44,16 @@ jDialog.fn.extend({
      * @param value
      * @returns {*}
      */
-    height: function (value) {
+    height: function(value) {
+
         if (value === undefined) {
-            return this.getWrapper().offsetHeight;
+            return this.height(this.getWrapper());
         }
+
+        if (value.nodeType === 1) {
+            return value.offsetHeight;
+        }
+
         this.wrapper.style.height = addPixelUnit(value);
         return this;
     },
@@ -56,10 +63,15 @@ jDialog.fn.extend({
      * @param value
      * @returns {*}
      */
-    width: function (value) {
+    width: function(value) {
         if (value === undefined) {
-            return this.getWrapper().offsetWidth;
+            return this.width(this.getWrapper());
         }
+
+        if (value.nodeType === 1) {
+            return value.offsetWidth;
+        }
+
         this.wrapper.style.width = addPixelUnit(value);
         return this;
     },
@@ -69,7 +81,7 @@ jDialog.fn.extend({
      * @param index
      * @returns {*}
      */
-    index: function (value) {
+    index: function(value) {
         if (value === undefined) {
             return this.currentDOMIndex;
         }
@@ -85,7 +97,7 @@ jDialog.fn.extend({
      * @param value
      * @returns {*}
      */
-    top: function (value) {
+    top: function(value) {
         if (value === undefined) {
             return win.getComputedStyle(this.getWrapper()).top;
         }
@@ -96,22 +108,27 @@ jDialog.fn.extend({
 
     /**
      * 相对于视口，还是相对于文档流
-     * @param useAbsolute
+     * @param isUse
      * @returns {*}
      */
-    fixed: function (useAbsolute) {
-        if (!useAbsolute) {
-            this.getWrapper().style.position = 'fixed';
-        } else {
+    fixed: function(isUse) {
+        var flag = true;
+        if (!isUse || (typeof isUse !== "undefined")) {
+            flag = false;
             this.getWrapper().style.position = 'absolute';
         }
-        this.verticalInViewPort(!useAbsolute);
-        return this;
+        return this.verticalInViewPort(flag);
     },
+
+    // 为了防止歧义而存在
+    absolute: function() {
+        return this.fixed(false);
+    },
+
     /**
      *
      */
-    preventHide: function () {
+    preventHide: function() {
         this.options.preventHide = true;
         return this;
     }

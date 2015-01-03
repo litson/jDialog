@@ -11,16 +11,14 @@
   left: 0;
   right: 0;
   opacity: 1;
-  -webkit-transition: -webkit-transform 0.15s ease-in-out;
-          transition: transform 0.15s ease-in-out;
-  -webkit-transform: scale(0.85);
-      -ms-transform: scale(0.85);
-          transform: scale(0.85);
+  transition: all 0.15s ease-in-out;
+  transform: scale(0.85);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 .dialog *,
 .dialog *:before,
 .dialog *:after {
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 .dialog.dialog-toast {
@@ -42,14 +40,10 @@
   opacity: 0;
 }
 .dialog.dialog-zoom-in {
-  -webkit-transform: scale(1);
-      -ms-transform: scale(1);
-          transform: scale(1);
+  transform: scale(1);
 }
 .dialog.dialog-zoom-out {
-  -webkit-transform: scale(0);
-      -ms-transform: scale(0);
-          transform: scale(0);
+  transform: scale(0);
 }
 .dialog-header {
   text-indent: 1em;
@@ -63,10 +57,12 @@
   overflow-y: auto;
 }
 .dialog-footer {
+  display: -webkit-box;
   display: box;
 }
 .dialog-btn {
   -webkit-box-flex: 1;
+  box-flex: 1;
   display: block;
   text-decoration: none;
   text-align: center;

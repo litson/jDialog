@@ -2,40 +2,33 @@
 ;(function (window, document) {
 
 
-    /* concat from'\src\core.js' */
+    /* concat from"/src/core.js" */
     var win = window;
     var doc = document;
     var version = '0.9.4';
-    var jDialog = function (message, callBack) {
+    var jDialog = function(message, callBack) {
         /**
          *
          */
         return new jDialog.fn.init(message, callBack);
     };
     
-    /**
-     *
-     * @type {{constructor: Function, init: Function}}
-     */
+    
     jDialog.fn = jDialog.prototype = {
         constructor: jDialog,
-        version: version,
         /**
          * @method init
          * @param message
          * @param callBack
          * @returns {jDialog}
          */
-        init: function (message, callBack) {
+        init: function(message, callBack) {
     
-            if (!message) {
-                return this;
-            }
             this.options = {
-                title: '提示',          // title
-                modal: true,        //是否启用模式窗口
-                content: '',                // messages
-                autoHide: 0,        // 自动销毁
+                title: '提示', // title
+                modal: true, //是否启用模式窗口
+                content: '', // messages
+                autoHide: 0, // 自动销毁
                 /**
                  *  对话框class前缀，默认无
                  *  强制使用BEM规范
@@ -44,13 +37,23 @@
                 prefix: '',
                 fixed: true,
                 /**
-                 *  点击modal不再隐藏
+                 *  点击modal不会销毁
                  */
                 preventHide: false,
                 callBack: null,
                 // iframe
                 url: null
             };
+    
+            this.actions = {};
+            this.buttons = [];
+            jDialog.event.root = this;
+    
+            // 只存活一个dialog
+            if (jDialog.currentDialog) {
+                jDialog.currentDialog.destory();
+            }
+            jDialog.currentDialog = this;
     
             if (jDialog.isPlainObject(message)) {
                 jDialog.extend(this.options, message);
@@ -60,17 +63,13 @@
                 if (jDialog.isFunction(callBack)) {
                     this.options.callBack = callBack;
                 }
+            } else {
+                return this;
             }
     
-            this.actions = {};
-            jDialog.event.root = this;
+            //
             _renderDOM(this);
     
-            // 只存活一个dialog
-            if (jDialog.currentDialog) {
-                jDialog.currentDialog.destory();
-            }
-            jDialog.currentDialog = this;
             return this;
         }
     };
@@ -79,7 +78,7 @@
      * 浅copy
      * @returns {*|{}}
      */
-    jDialog.extend = jDialog.fn.extend = function () {
+    jDialog.extend = jDialog.fn.extend = function() {
     
         var target = arguments[0] || {};
         var options = arguments[1] || {};
@@ -107,14 +106,14 @@
      */
     jDialog.fn.init.prototype = jDialog.fn;
 
-    /* concat from'\src\helper.js' */
+    /* concat from"/src/helper.js" */
     jDialog.extend({
         /**
          * is function
          * @param fn
          * @returns {boolean}
          */
-        isFunction: function (fn) {
+        isFunction: function(fn) {
             return Object.prototype.toString.call(fn) === '[object Function]';
         },
     
@@ -123,63 +122,84 @@
          * @param obj
          * @returns {boolean}
          */
-        isPlainObject: function (obj) {
-            if (obj === null) {
+        isPlainObject: function(obj) {
+            if (obj === null || obj === undefined) {
                 return false;
             }
             return obj.constructor == {}.constructor;
-        }
+        },
+    
+    
+        isUrl: function(url) {
+            var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+            return regexp.test(url);
+        },
+    
+        /**
+         * 顶级缓存对象，目前没什么用
+         */
+        expando: "jDialog" + (version + Math.random()).replace(/\D/g, '')
     });
 
-    /* concat from'\src\event.js' */
+    /* concat from"/src/event.js" */
     /**
      *
      * @type {{add: Function, remove: Function, has: Function, fire: Function}}
      */
     jDialog.event = {
-        add: function (actionName, handler) {
-            var self = this.root;
+        getRoot: function() {
+            return this.root || jDialog.currentDialog || jDialog();
+        },
+        add: function(actionName, handler) {
+            var root = this.getRoot();
             if (!this.has(actionName)) {
-                self.actions[actionName] = [];
+                root.actions[actionName] = [];
             }
             if (jDialog.isFunction(handler)) {
-                self.actions[actionName].push(handler);
+                root.actions[actionName].push(handler);
             }
+            return this;
         },
-        remove: function (actionName) {
-            var self = this.root;
+        remove: function(actionName) {
+            var root = this.getRoot();
             if (this.has(actionName)) {
-                return delete self.actions[actionName];
+                return delete root.actions[actionName];
             }
             console.warn(actionName + '不存在');
             return false;
         },
-        has: function (actionName) {
-            var self = this.root;
-            if (self.constructor != jDialog
-                || typeof actionName !== 'string'
-                || !self.actions[actionName]) {
+        has: function(actionName) {
+            var root = this.getRoot();
+            if (typeof actionName !== 'string' || !root.actions[actionName]) {
                 return false;
             }
             return true;
         },
-        fire: function (actionName) {
-            var self = this.root;
+        once: function(actionName) {
             if (this.has(actionName)) {
-                var actions = self.actions[actionName];
+                this.fire(actionName)
+                    .remove(actionName);
+            }
+    
+            return this;
+        },
+        fire: function(actionName) {
+            var root = this.getRoot();
+            if (this.has(actionName)) {
+                var actions = root.actions[actionName];
                 var length = actions.length;
-                if (!length) {
-                    return false;
-                }
-                var i = 0;
-                for (; i < length; i++) {
-                    actions[i].call(self);
+                if (length) {
+                    var i = 0;
+                    for (; i < length; i++) {
+                        actions[i].call(root);
+                    }
                 }
             }
+            return this;
         }
     };
 
-    /* concat from'\src\operations.js' */
+    /* concat from"/src/operations.js" */
     /**
      *
      * @param jDialog
@@ -203,29 +223,33 @@
             .appendChild(self.getFooter());
     
         //
-        var content = options.content;
+    
         if (options.url) {
-            var clientHeight = doc.documentElement.clientHeight;
-            content = '<iframe style="width: 100%" height="'
-            + clientHeight
-            + '" frameborder="0" src="'
-            + options.url
-            + '"></iframe>';
+            self.iframe(options.url);
+    
+        } else {
+            self.content(options.content);
+    
         }
-        self.content(content);
+    
+        self.addButton('取消', 'destory', function() {
+            self.destory();
+        });
     
         //
         if (options.modal) {
             self.showModal();
         }
+    
+        if (options.autoHide) {
+            self.autoHide(options.autoHide);
+        }
+    
         //
         if (options.callBack) {
             self.addButton('确定', 'apply', options.callBack);
         }
-        //
-        self.addButton('取消', 'destory', function () {
-            self.destory();
-        });
+    
         wrapper.addEventListener('click', _eventRouter.bind(self), false);
         doc.body.appendChild(wrapper);
     
@@ -270,10 +294,8 @@
     function _createModal(context) {
         var self = context;
         var element = _createElement('div');
-        element.style.cssText = ';background:rgba(0,0,0,0.3);width:100%;'
-        + 'height:100%;position:fixed;left:0;top:0;z-index:'
-        + (self.currentDOMIndex - 1);
-        element.onclick = function () {
+        element.style.cssText = ';background:rgba(0,0,0,0.3);width:100%;' + 'height:100%;position:fixed;left:0;top:0;z-index:' + (self.currentDOMIndex - 1);
+        element.onclick = function() {
             if (!self.options.preventHide) {
                 jDialog.event.fire('destory');
             }
@@ -287,7 +309,7 @@
         /**
          * 保证 position:fixed 的dialog永远处于视口内；
          */
-        verticalInViewPort: function (useFixed) {
+        verticalInViewPort: function(useFixed) {
             var docElement = doc.documentElement;
             var clientHeight = docElement.clientHeight;
             var dialogHeight = this.height();
@@ -297,7 +319,7 @@
                 if (dialogHeight > clientHeight) {
                     dialogHeight = clientHeight - 30;
                     this.getContainer().style.height =
-                        dialogHeight - (this.getHeader().offsetHeight + this.getFooter().offsetHeight) + 'px';
+                        dialogHeight - (this.height(this.getHeader()) + this.height(this.getFooter())) + 'px';
                 }
                 this.height(dialogHeight)
                     .toggleLockBody(true)
@@ -309,7 +331,8 @@
     
             } else {
     
-                var scrollTop = docElement.scrollTop;
+                // 矫情，明知道webkit取scrollTop是从body取，还要这么做
+                var scrollTop = Math.max(doc.body.scrollTop, docElement.scrollTop);
                 var top = Math.max((clientHeight - dialogHeight) * 382 / 1000 + scrollTop, scrollTop);
     
                 this.top(top)
@@ -326,7 +349,7 @@
          * 锁住body的scroll，不让其滚动；
          * @param useLock
          */
-        toggleLockBody: function (useLock) {
+        toggleLockBody: function(useLock) {
             var height = '';
             var hiddenType = '';
             if (useLock) {
@@ -342,14 +365,14 @@
          *  获取dialog的DOM结构
          * @returns {HTMLElement|*|wrapper}
          */
-        getWrapper: function () {
+        getWrapper: function() {
             if (!this.wrapper) {
                 var prefix = this.options.prefix;
                 this.wrapper = _createElement('div', {
                     className: prefix + 'dialog'
                 });
     
-                this.wrapper.style.zIndex = this.currentDOMIndex = 9;
+                this.wrapper.style.zIndex = this.currentDOMIndex = 614;
             }
     
             return this.wrapper;
@@ -359,7 +382,7 @@
          *  获取页头的DOM结构
          * @returns {HTMLElement|*|header}
          */
-        getHeader: function () {
+        getHeader: function() {
             if (!this.header) {
                 var prefix = this.options.prefix;
                 this.header = _createElement('div', {
@@ -373,9 +396,9 @@
          * 隐藏页头
          * @returns {*}
          */
-        hideHeader: function () {
+        hideHeader: function() {
             var header = this.getHeader();
-            var height = header.offsetHeight;
+            var height = this.height(header);
             this.height(this.height() - height);
             header.style.display = 'none';
             return this;
@@ -385,7 +408,7 @@
          * 获取当前dialog内容的DOM结构
          * @returns {HTMLElement|*|container}
          */
-        getContainer: function () {
+        getContainer: function() {
             if (!this.container) {
                 var prefix = this.options.prefix;
                 this.container = _createElement('div', {
@@ -399,7 +422,7 @@
          * 获取页尾的dom结构
          * @returns {HTMLElement|*|footer}
          */
-        getFooter: function () {
+        getFooter: function() {
             if (!this.footer) {
                 var prefix = this.options.prefix;
                 this.footer = _createElement('div', {
@@ -413,45 +436,88 @@
          * 隐藏页尾
          * @returns {*}
          */
-        hideFooter: function () {
+        hideFooter: function() {
             var footer = this.getFooter();
-            var height = footer.offsetHeight;
+            var height = this.height(footer);
             this.height(this.height() - height);
             footer.style.display = 'none';
             return this;
         },
     
         /**
-         * 关于添加按钮及事件的模块，
-         * 现在很不灵活。。。
+         * 添加按钮及事件
          * @method addButton
          * @param text
          * @param actionName
          * @param handler
          * @returns {*}
          */
-        addButton: function (text, actionName, handler) {
+        addButton: function(text, actionName, handler) {
+            // 模拟重载
+            var fnKey = ("jDialog" + Math.random()).replace(/\D/g, '');
+            var defaultText = '确定';
+            // 如果第一个参数是一个function
+            if (jDialog.isFunction(text)) {
+                return this.addButton(defaultText, actionName || fnKey, text);
+            }
+    
+            if (jDialog.isFunction(actionName)) {
+                return this.addButton(text, fnKey, actionName);
+            }
+    
             var prefix = this.options.prefix;
             var element = _createElement('a', {
                 href: 'javascript:;',
                 className: prefix + 'dialog-btn',
-                innerHTML: text || '按钮'
+                innerHTML: text || defaultText
             });
-            if (actionName) {
-                element.setAttribute('data-dialog-action', actionName);
+    
+            if (!actionName) {
+                actionName = "destory";
+            } else {
                 jDialog.event.add(actionName, handler);
             }
-            //
-            this.getFooter().appendChild(element);
+            element.setAttribute('data-dialog-action', actionName);
+    
+            var footer = this.getFooter();
+            if (this.buttons.length) {
+                this.addClass("dialog-btn-primary", element);
+                footer.insertBefore(element, footer.childNodes.item(0));
+            } else {
+                footer.appendChild(element);
+            }
+            this.buttons.push(element);
             return this;
         },
     
+        // 如果保证每个按钮对应队里的action，则可放心移除button
+        delButton: function(index) {
+            var button = this.getButton(index);
+            var actionName;
+            if (button) {
+                actionName = button.getAttribute('data-dialog-action');
+                jDialog.event.remove(actionName);
+                this.getFooter().removeChild(button);
+                var i = this.buttons.indexOf(button);
+                this.buttons.splice(i, 1);
+            }
+            return this;
+        },
+    
+        getButton: function(index) {
+            var buttons = this.buttons.slice().reverse();
+            if (buttons[index]) {
+                return buttons[index];
+            } else {
+                return null;
+            }
+        },
         /**
          * 为当前dialog添加class
          * @param className
          * @returns {*}
          */
-        addClass: function (className, context) {
+        addClass: function(className, context) {
             // 自动补齐前缀
             //var prefix = this.options.prefix;
             //var reg = new RegExp('^' + prefix, 'gi');
@@ -459,8 +525,7 @@
             //    className = prefix + className;
             //}
             var context = context || this.getWrapper();
-            if (context.nodeType === 1
-                && typeof className === 'string') {
+            if (context.nodeType === 1 && typeof className === 'string') {
                 context.classList.add(className);
             }
             return this;
@@ -470,15 +535,14 @@
          * 为当前dialog添加remove
          * @param className
          */
-        removeClass: function (className, context) {
+        removeClass: function(className, context) {
             //var prefix = this.options.prefix;
             //var reg = new RegExp('^' + prefix, 'gi');
             //if (!reg.test(className)) {
             //    className = prefix + className;
             //}
             var context = context || this.getWrapper();
-            if (context.nodeType === 1
-                && typeof className === 'string') {
+            if (context.nodeType === 1 && typeof className === 'string') {
                 context.classList.remove(className);
             }
             return this;
@@ -489,7 +553,10 @@
          * @param delay  为0，直接销毁；不设置，采用默认用户设置；
          * @returns {*}
          */
-        autoHide: function (delay) {
+        autoHide: function(delay) {
+            if (!jDialog.currentDialog) {
+                return this;
+            }
     
             // 0则自动销毁；
             if (delay == 0) {
@@ -506,7 +573,7 @@
                 clearTimeout(this.autoHideTimer);
             }
     
-            this.autoHideTimer = setTimeout(function () {
+            this.autoHideTimer = setTimeout(function() {
                 this.destory();
                 clearTimeout(this.autoHideTimer);
                 this.autoHideTimer = null;
@@ -519,7 +586,7 @@
          *
          * @returns {*}
          */
-        destory: function () {
+        destory: function() {
             if (this.wrapper) {
                 this.wrapper.removeEventListener('click', _eventRouter, false);
                 doc.body.removeChild(this.wrapper);
@@ -528,8 +595,12 @@
                 this.modal.onclick = null;
                 doc.body.removeChild(this.modal);
             }
+            if (this.autoHideTimer) {
+                clearTimeout(this.autoHideTimer);
+            }
             this.toggleLockBody(false);
-            jDialog.currentDialog = null;
+            this.actions = [];
+            jDialog.event.root = jDialog.currentDialog = null;
             return this;
         },
     
@@ -537,7 +608,7 @@
          * 获取当前dialog的Modal的DOM结构
          * @returns {modal|*}
          */
-        getModal: function () {
+        getModal: function() {
             if (!this.modal) {
                 this.modal = _createModal(this);
             }
@@ -548,7 +619,7 @@
          * 隐藏当前dialog的Modal
          * @returns {*}
          */
-        hideModal: function () {
+        hideModal: function() {
             this.getModal().style.display = 'none';
             return this;
         },
@@ -557,19 +628,59 @@
          * 显示当前dialog的Modal
          * @returns {*}
          */
-        showModal: function () {
+        showModal: function() {
             this.getModal().style.display = '';
             return this;
+        },
+        iframe: function(url) {
+            var self = this;
+            var url = url || self.options.url;
+            if (!jDialog.isUrl(url)) {
+                return self.content(url + '不是一个有效的地址');
+            }
+    
+            var container = self.getContainer();
+            var clientHeight = doc.documentElement.clientHeight;
+    
+    
+            container.style.position = 'relative';
+            this.content('<div ' +
+                'style="text-align: center;background-color: rgba(255,255,255,0.5);' +
+                'position:absolute;' +
+                'left:0;top:0;width:100%;height:100%">' +
+                'loading...</div>');
+    
+            var iframe = _createElement('iframe', {
+                frameborder: 0,
+                width: '100%',
+                height: clientHeight
+            });
+    
+            iframe.onload = function() {
+                var parent = this.parentNode;
+                var loadingElement = parent.getElementsByTagName('div')[0];
+                parent.removeChild(loadingElement);
+                iframe.onload = null;
+            }
+            iframe.onerror = function() {
+                // ,<a href="#nogo" onclick="">重新加载</a>
+                self.content('加载' + url + '时发生错误');
+                iframe.onerror = null;
+            }
+    
+            container.appendChild(iframe);
+            iframe.src = url;
+            return self;
         }
     });
 
-    /* concat from'\src\setting.js' */
+    /* concat from"/src/setting.js" */
     /**
      *  设置函数集
      * @param number
      * @returns {*}
      */
-    var addPixelUnit = function (number) {
+    var addPixelUnit = function(number) {
         if (!/em|px|rem|pt|%|auto/gi.test(number)) {
             number = number + 'px';
         }
@@ -583,11 +694,12 @@
          * @param text
          * @returns {*}
          */
-        title: function (value) {
+        title: function(value) {
             if (typeof value === 'undefined') {
                 return this.options.title;
             }
-            this.getHeader().innerHTML = value;
+    
+            this.getHeader().innerHTML = this.options.title = value;
             return this;
         },
     
@@ -596,11 +708,11 @@
          * @param value
          * @returns {*}
          */
-        content: function (value) {
+        content: function(value) {
             if (value === undefined) {
                 return this.options.content;
             }
-            this.getContainer().innerHTML = value;
+            this.getContainer().innerHTML = this.options.content = value;
             return this;
         },
     
@@ -609,10 +721,16 @@
          * @param value
          * @returns {*}
          */
-        height: function (value) {
+        height: function(value) {
+    
             if (value === undefined) {
-                return this.getWrapper().offsetHeight;
+                return this.height(this.getWrapper());
             }
+    
+            if (value.nodeType === 1) {
+                return value.offsetHeight;
+            }
+    
             this.wrapper.style.height = addPixelUnit(value);
             return this;
         },
@@ -622,10 +740,15 @@
          * @param value
          * @returns {*}
          */
-        width: function (value) {
+        width: function(value) {
             if (value === undefined) {
-                return this.getWrapper().offsetWidth;
+                return this.width(this.getWrapper());
             }
+    
+            if (value.nodeType === 1) {
+                return value.offsetWidth;
+            }
+    
             this.wrapper.style.width = addPixelUnit(value);
             return this;
         },
@@ -635,7 +758,7 @@
          * @param index
          * @returns {*}
          */
-        index: function (value) {
+        index: function(value) {
             if (value === undefined) {
                 return this.currentDOMIndex;
             }
@@ -651,7 +774,7 @@
          * @param value
          * @returns {*}
          */
-        top: function (value) {
+        top: function(value) {
             if (value === undefined) {
                 return win.getComputedStyle(this.getWrapper()).top;
             }
@@ -662,52 +785,60 @@
     
         /**
          * 相对于视口，还是相对于文档流
-         * @param useAbsolute
+         * @param isUse
          * @returns {*}
          */
-        fixed: function (useAbsolute) {
-            if (!useAbsolute) {
-                this.getWrapper().style.position = 'fixed';
-            } else {
+        fixed: function(isUse) {
+            var flag = true;
+            if (!isUse || (typeof isUse !== "undefined")) {
+                flag = false;
                 this.getWrapper().style.position = 'absolute';
             }
-            this.verticalInViewPort(!useAbsolute);
-            return this;
+            return this.verticalInViewPort(flag);
         },
+    
+        // 为了防止歧义而存在
+        absolute: function() {
+            return this.fixed(false);
+        },
+    
         /**
          *
          */
-        preventHide: function () {
+        preventHide: function() {
             this.options.preventHide = true;
             return this;
         }
     });
 
-    /* concat from'\src\components.js' */
+    /* concat from"/src/components.js" */
     /**
      *  封装一些常用的dialog
      */
     jDialog.extend({
-        alert: function (message) {
+        alert: function(message) {
             return jDialog(message);
         },
-        toast: function (message, delay) {
+        toast: function(message, delay) {
             var dialog = jDialog(message);
+            var container = dialog.getContainer();
+            var height = dialog.height(container);
             dialog.getContainer().style.textAlign = 'center';
             dialog
                 .hideFooter()
                 .hideHeader()
                 .hideModal()
+                .height(height)
                 .addClass('dialog-toast')
                 .autoHide(delay || 3);
             return dialog;
         },
-        error: function (message, callBack) {
-            return jDialog(message,callBack).addClass('dialog-error');
+        error: function(message, callBack) {
+            return jDialog(message, callBack).addClass('dialog-error');
         }
     });
 
-    /* concat from'\src\compatibleAMD.js' */
+    /* concat from"/src/compatibleAMD.js" */
     if (typeof define === "function" && define.amd) {
         define("jdialog", [], function () {
             return jDialog;
@@ -718,4 +849,4 @@
 
 })(window, window.document);
 
-//# sourceMappingURL=../maps/jDialog.js.map
+//# sourceMappingURL=jDialog.js.map

@@ -10,8 +10,6 @@
         "gulp-watch": "latest",
         "gulp-concat-util": "latest",
         "gulp-sourcemaps": "latest",
-        "gulp-yuidoc":"latest",
-        "gulp-docco":"latest",
         "gulp-less":"latest",
         "gulp-jshint":"latest",
         "gulp-autoprefixer":"latest"

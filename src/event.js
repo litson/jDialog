@@ -3,44 +3,54 @@
  * @type {{add: Function, remove: Function, has: Function, fire: Function}}
  */
 jDialog.event = {
-    add: function (actionName, handler) {
-        var self = this.root;
+    getRoot: function() {
+        return this.root || jDialog.currentDialog || jDialog();
+    },
+    add: function(actionName, handler) {
+        var root = this.getRoot();
         if (!this.has(actionName)) {
-            self.actions[actionName] = [];
+            root.actions[actionName] = [];
         }
         if (jDialog.isFunction(handler)) {
-            self.actions[actionName].push(handler);
+            root.actions[actionName].push(handler);
         }
+        return this;
     },
-    remove: function (actionName) {
-        var self = this.root;
+    remove: function(actionName) {
+        var root = this.getRoot();
         if (this.has(actionName)) {
-            return delete self.actions[actionName];
+            return delete root.actions[actionName];
         }
         console.warn(actionName + '不存在');
         return false;
     },
-    has: function (actionName) {
-        var self = this.root;
-        if (self.constructor != jDialog
-            || typeof actionName !== 'string'
-            || !self.actions[actionName]) {
+    has: function(actionName) {
+        var root = this.getRoot();
+        if (typeof actionName !== 'string' || !root.actions[actionName]) {
             return false;
         }
         return true;
     },
-    fire: function (actionName) {
-        var self = this.root;
+    once: function(actionName) {
         if (this.has(actionName)) {
-            var actions = self.actions[actionName];
+            this.fire(actionName)
+                .remove(actionName);
+        }
+
+        return this;
+    },
+    fire: function(actionName) {
+        var root = this.getRoot();
+        if (this.has(actionName)) {
+            var actions = root.actions[actionName];
             var length = actions.length;
-            if (!length) {
-                return false;
-            }
-            var i = 0;
-            for (; i < length; i++) {
-                actions[i].call(self);
+            if (length) {
+                var i = 0;
+                for (; i < length; i++) {
+                    actions[i].call(root);
+                }
             }
         }
+        return this;
     }
 };
