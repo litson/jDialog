@@ -1,6 +1,6 @@
 var win = window;
 var doc = document;
-var version = '0.9.4';
+var version = '1.0.0';
 var jDialog = function(message, callBack) {
     /**
      *
@@ -39,11 +39,9 @@ jDialog.fn = jDialog.prototype = {
             // iframe
             url: null
         };
-
         this.actions = {};
         this.buttons = [];
         jDialog.event.root = this;
-
         // 只存活一个dialog
         if (jDialog.currentDialog) {
             jDialog.currentDialog.destory();
@@ -62,7 +60,6 @@ jDialog.fn = jDialog.prototype = {
             return this;
         }
 
-        //
         _renderDOM(this);
 
         return this;

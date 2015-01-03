@@ -250,7 +250,9 @@ jDialog.fn.extend({
      * @param handler
      * @returns {*}
      */
+
     addButton: function(text, actionName, handler) {
+
         // 模拟重载
         var fnKey = ("jDialog" + Math.random()).replace(/\D/g, '');
         var defaultText = '确定';
@@ -285,6 +287,7 @@ jDialog.fn.extend({
             footer.appendChild(element);
         }
         this.buttons.push(element);
+
         return this;
     },
 
@@ -440,7 +443,6 @@ jDialog.fn.extend({
         var container = self.getContainer();
         var clientHeight = doc.documentElement.clientHeight;
 
-
         container.style.position = 'relative';
         this.content('<div ' +
             'style="text-align: center;background-color: rgba(255,255,255,0.5);' +
@@ -453,7 +455,6 @@ jDialog.fn.extend({
             width: '100%',
             height: clientHeight
         });
-
         iframe.onload = function() {
             var parent = this.parentNode;
             var loadingElement = parent.getElementsByTagName('div')[0];

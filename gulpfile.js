@@ -7,9 +7,9 @@ var sourcemaps = require('gulp-sourcemaps');
 var jshint = require('gulp-jshint');
 var less = require('gulp-less');
 var autoprefixer = require('gulp-autoprefixer');
-//var uglify = require('gulp-uglify');
+var uglify = require('gulp-uglify');
 //var size = require('gulp-size');
-//var csso = require('gulp-csso');
+var csso = require('gulp-csso');
 //var livereload = require('gulp-livereload');
 //var tinylr = require('tiny-lr');
 
@@ -24,6 +24,8 @@ var jsFiles = ['core.js',
 
 var lessPath = './src/*.less';
 var distPath = './dist/';
+// todo 从package.json中获取
+var version = '1.0.0';
 
 function addPrefixToEachItem(prefix, items) {
     var i = items.length;
@@ -39,8 +41,19 @@ var jsPath = addPrefixToEachItem('./src/', jsFiles);
 // TODO:文档生成
 gulp.task('docs', function() {});
 
-//TODO:js、css压缩
-gulp.task('compress', function() {});
+//
+gulp.task('compress', function() {
+    var compressPath = distPath + "/jDialog-" + version;
+
+    gulp.src(distPath + "*.js")
+        .pipe(uglify())
+        .pipe(gulp.dest(compressPath));
+
+    gulp.src(distPath + "*.css")
+        .pipe(csso())
+        .pipe(gulp.dest(compressPath));
+
+});
 
 // 代码检查
 gulp.task('lint', function() {
@@ -102,5 +115,4 @@ gulp.task('watch', function() {
 
 });
 
-//
-gulp.task('default', ['concat', 'less','ap', 'watch']);
+gulp.task('default', ['concat', 'less', 'ap', 'watch']);

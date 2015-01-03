@@ -1,6 +1,6 @@
 {
     "name": "jDialog",
-    "version": "0.9.3",
+    "version": "1.0.0",
     "main": "dist/jDialog.js",
     "author": {
         "name": "Just me"
@@ -10,8 +10,10 @@
         "gulp-watch": "latest",
         "gulp-concat-util": "latest",
         "gulp-sourcemaps": "latest",
-        "gulp-less":"latest",
-        "gulp-jshint":"latest",
-        "gulp-autoprefixer":"latest"
+        "gulp-less": "latest",
+        "gulp-jshint": "latest",
+        "gulp-uglify": "latest",
+        "gulp-csso": "latest",
+        "gulp-autoprefixer": "latest"
     }
 }

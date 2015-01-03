@@ -1,5 +1,5 @@
 if (typeof define === "function" && define.amd) {
-    define("jdialog", [], function () {
+    define("jdialog", [], function() {
         return jDialog;
     });
 } else {

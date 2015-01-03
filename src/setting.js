@@ -21,7 +21,6 @@ jDialog.fn.extend({
         if (typeof value === 'undefined') {
             return this.options.title;
         }
-
         this.getHeader().innerHTML = this.options.title = value;
         return this;
     },

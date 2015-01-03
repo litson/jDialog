@@ -5,7 +5,7 @@
     /* concat from"/src/core.js" */
     var win = window;
     var doc = document;
-    var version = '0.9.4';
+    var version = '1.0.0';
     var jDialog = function(message, callBack) {
         /**
          *
@@ -44,11 +44,9 @@
                 // iframe
                 url: null
             };
-    
             this.actions = {};
             this.buttons = [];
             jDialog.event.root = this;
-    
             // 只存活一个dialog
             if (jDialog.currentDialog) {
                 jDialog.currentDialog.destory();
@@ -67,7 +65,6 @@
                 return this;
             }
     
-            //
             _renderDOM(this);
     
             return this;
@@ -129,7 +126,6 @@
             return obj.constructor == {}.constructor;
         },
     
-    
         isUrl: function(url) {
             var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
             return regexp.test(url);
@@ -139,6 +135,7 @@
          * 顶级缓存对象，目前没什么用
          */
         expando: "jDialog" + (version + Math.random()).replace(/\D/g, '')
+    
     });
 
     /* concat from"/src/event.js" */
@@ -452,7 +449,9 @@
          * @param handler
          * @returns {*}
          */
+    
         addButton: function(text, actionName, handler) {
+    
             // 模拟重载
             var fnKey = ("jDialog" + Math.random()).replace(/\D/g, '');
             var defaultText = '确定';
@@ -487,6 +486,7 @@
                 footer.appendChild(element);
             }
             this.buttons.push(element);
+    
             return this;
         },
     
@@ -642,7 +642,6 @@
             var container = self.getContainer();
             var clientHeight = doc.documentElement.clientHeight;
     
-    
             container.style.position = 'relative';
             this.content('<div ' +
                 'style="text-align: center;background-color: rgba(255,255,255,0.5);' +
@@ -655,7 +654,6 @@
                 width: '100%',
                 height: clientHeight
             });
-    
             iframe.onload = function() {
                 var parent = this.parentNode;
                 var loadingElement = parent.getElementsByTagName('div')[0];
@@ -698,7 +696,6 @@
             if (typeof value === 'undefined') {
                 return this.options.title;
             }
-    
             this.getHeader().innerHTML = this.options.title = value;
             return this;
         },
@@ -840,7 +837,7 @@
 
     /* concat from"/src/compatibleAMD.js" */
     if (typeof define === "function" && define.amd) {
-        define("jdialog", [], function () {
+        define("jdialog", [], function() {
             return jDialog;
         });
     } else {
