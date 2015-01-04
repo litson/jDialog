@@ -13,7 +13,8 @@ var csso = require('gulp-csso');
 //var livereload = require('gulp-livereload');
 //var tinylr = require('tiny-lr');
 
-var jsFiles = ['core.js',
+var jsFiles = [
+    'core.js',
     'helper.js',
     'event.js',
     'operations.js',
@@ -25,7 +26,7 @@ var jsFiles = ['core.js',
 var lessPath = './src/*.less';
 var distPath = './dist/';
 // todo 从package.json中获取
-var version = '1.0.0';
+var version = '1.0.1';
 
 function addPrefixToEachItem(prefix, items) {
     var i = items.length;
@@ -115,4 +116,4 @@ gulp.task('watch', function() {
 
 });
 
-gulp.task('default', ['concat', 'less', 'ap', 'watch']);
+gulp.task('default', ['concat', 'less', 'watch']);

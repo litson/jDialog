@@ -5,14 +5,14 @@
   border-radius: 5px;
   border: 1px solid #ddd;
   overflow: hidden;
-  width: 90%;;
+  width: 90%;
   position: absolute;
   margin: auto;
   left: 0;
   right: 0;
   opacity: 1;
-  transition: all .15s ease-in-out;
-  transform: scale(.85);
+  -webkit-transition: -webkit-transform .15s ease-in-out;
+  -webkit-transform: scale(.85);
   box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
 
   *, *:before, *:after {
@@ -43,10 +43,10 @@
     opacity: 0;
   }
   &.dialog-zoom-in {
-    transform: scale(1);
+    -webkit-transform: scale(1);
   }
   &.dialog-zoom-out {
-    transform: scale(0);
+    -webkit-transform: scale(0);
   }
 }
 
@@ -89,6 +89,6 @@
 .dialog-btn-primary {
   border-color: #e94543;
   color: #fff;
-  background-color: #e94543;;
+  background-color: #e94543;
 }
 

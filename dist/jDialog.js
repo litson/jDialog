@@ -347,14 +347,28 @@
          * @param useLock
          */
         toggleLockBody: function(useLock) {
-            var height = '';
-            var hiddenType = '';
+    
+            var header = this.getHeader();
+            var footer = this.getFooter();
+            var modal = this.getModal();
+            var ev = 'ontouchmove';
+    
             if (useLock) {
-                height = '100%';
-                hiddenType = 'hidden';
+                header[ev] = footer[ev] = modal[ev] = function(){
+                    return false;
+                }
+            } else {
+                header[ev] = footer[ev] = modal[ev] = null;
             }
-            doc.body.style.height = height;
-            doc.body.style.overflow = hiddenType;
+    
+            //        var height = '';
+            //        var hiddenType = '';
+            //        if (useLock) {
+            //            height = '100%';
+            //            hiddenType = 'hidden';
+            //        }
+            //        doc.body.style.height = height;
+            //        doc.body.style.overflow = hiddenType;
             return this;
         },
     

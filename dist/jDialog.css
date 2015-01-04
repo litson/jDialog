@@ -11,8 +11,8 @@
   left: 0;
   right: 0;
   opacity: 1;
-  transition: all 0.15s ease-in-out;
-  transform: scale(0.85);
+  -webkit-transition: -webkit-transform 0.15s ease-in-out;
+  -webkit-transform: scale(0.85);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 .dialog *,
@@ -40,10 +40,10 @@
   opacity: 0;
 }
 .dialog.dialog-zoom-in {
-  transform: scale(1);
+  -webkit-transform: scale(1);
 }
 .dialog.dialog-zoom-out {
-  transform: scale(0);
+  -webkit-transform: scale(0);
 }
 .dialog-header {
   text-indent: 1em;
