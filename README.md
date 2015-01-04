@@ -4,6 +4,7 @@ jDialog - 使用起来就像jQuery一样
 ## Guides
 > jDialog是参照jQuery核心原理，摒弃丑陋的 new 关键字，
     支持像jQuery扩展一样自定义属于你的dialog
+    <br>demo http://litson.github.io/2015/01/02/jDialog/
 
 ## Usage
 ```js
