@@ -3,7 +3,7 @@
  * @param number
  * @returns {*}
  */
-var addPixelUnit = function(number) {
+var addPixelUnit = function (number) {
     if (!/em|px|rem|pt|%|auto/gi.test(number)) {
         number = number + 'px';
     }
@@ -17,7 +17,7 @@ jDialog.fn.extend({
      * @param text
      * @returns {*}
      */
-    title: function(value) {
+    title: function (value) {
         if (typeof value === 'undefined') {
             return this.options.title;
         }
@@ -30,7 +30,7 @@ jDialog.fn.extend({
      * @param value
      * @returns {*}
      */
-    content: function(value) {
+    content: function (value) {
         if (value === undefined) {
             return this.options.content;
         }
@@ -43,7 +43,7 @@ jDialog.fn.extend({
      * @param value
      * @returns {*}
      */
-    height: function(value) {
+    height: function (value) {
 
         if (value === undefined) {
             return this.height(this.getWrapper());
@@ -62,7 +62,7 @@ jDialog.fn.extend({
      * @param value
      * @returns {*}
      */
-    width: function(value) {
+    width: function (value) {
         if (value === undefined) {
             return this.width(this.getWrapper());
         }
@@ -70,8 +70,11 @@ jDialog.fn.extend({
         if (value.nodeType === 1) {
             return value.offsetWidth;
         }
-
-        this.wrapper.style.width = addPixelUnit(value);
+        jDialog.extend(this.wrapper.style, {
+            width: addPixelUnit(value),
+            marginLeft: addPixelUnit(-(parseFloat(value) / 2))
+        });
+        //.width = addPixelUnit(value);
         return this;
     },
 
@@ -80,7 +83,7 @@ jDialog.fn.extend({
      * @param index
      * @returns {*}
      */
-    index: function(value) {
+    index: function (value) {
         if (value === undefined) {
             return this.currentDOMIndex;
         }
@@ -96,12 +99,16 @@ jDialog.fn.extend({
      * @param value
      * @returns {*}
      */
-    top: function(value) {
+    top: function (value) {
         if (value === undefined) {
             return win.getComputedStyle(this.getWrapper()).top;
         }
-        this.wrapper.style.top = addPixelUnit(value);
-        this.wrapper.style.bottom = '';
+        jDialog.extend(this.wrapper.style,{
+            top:addPixelUnit(value),
+            marginTop:''
+        });
+        //this.wrapper.style.top = addPixelUnit(value);
+        //this.wrapper.style.bottom = '';
         return this;
     },
 
@@ -110,7 +117,7 @@ jDialog.fn.extend({
      * @param isUse
      * @returns {*}
      */
-    fixed: function(isUse) {
+    fixed: function (isUse) {
         var flag = true;
         if (!isUse || (typeof isUse !== "undefined")) {
             flag = false;
@@ -120,14 +127,14 @@ jDialog.fn.extend({
     },
 
     // 为了防止歧义而存在
-    absolute: function() {
+    absolute: function () {
         return this.fixed(false);
     },
 
     /**
      *
      */
-    preventHide: function() {
+    preventHide: function () {
         this.options.preventHide = true;
         return this;
     }

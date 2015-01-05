@@ -7,9 +7,8 @@
   overflow: hidden;
   width: 90%;
   position: absolute;
-  margin: auto;
-  left: 0;
-  right: 0;
+  left: 50%;
+  margin-left: -45%;
   opacity: 1;
   -webkit-transition: -webkit-transform 0.15s ease-in-out;
   -webkit-transform: scale(0.85);

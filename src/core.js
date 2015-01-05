@@ -44,7 +44,7 @@ jDialog.fn = jDialog.prototype = {
         jDialog.event.root = this;
         // 只存活一个dialog
         if (jDialog.currentDialog) {
-            jDialog.currentDialog.destory();
+            jDialog.currentDialog.remove();
         }
         jDialog.currentDialog = this;
 
