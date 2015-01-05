@@ -311,7 +311,7 @@ jDialog.fn.extend({
         var actionName;
         if (button) {
             actionName = button.getAttribute('data-dialog-action');
-            jDialog.event.remove(actionName);
+            (actionName!='destory') && jDialog.event.remove(actionName);
             this.getFooter().removeChild(button);
             var i = this.buttons.indexOf(button);
             this.buttons.splice(i, 1);

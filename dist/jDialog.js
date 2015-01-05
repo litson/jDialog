@@ -2,7 +2,7 @@
 ;(function (window, document) {
 
 
-    /* concat from"/src/core.js" */
+    /* concat from"\src\core.js" */
     var win = window;
     var doc = document;
     var version = '1.0.0';
@@ -103,7 +103,7 @@
      */
     jDialog.fn.init.prototype = jDialog.fn;
 
-    /* concat from"/src/helper.js" */
+    /* concat from"\src\helper.js" */
     jDialog.extend({
         /**
          * is function
@@ -138,7 +138,7 @@
     
     });
 
-    /* concat from"/src/event.js" */
+    /* concat from"\src\event.js" */
     /**
      *
      * @type {{add: Function, remove: Function, has: Function, fire: Function}}
@@ -196,7 +196,7 @@
         }
     };
 
-    /* concat from"/src/operations.js" */
+    /* concat from"\src\operations.js" */
     /**
      *
      * @param jDialog
@@ -510,7 +510,7 @@
             var actionName;
             if (button) {
                 actionName = button.getAttribute('data-dialog-action');
-                jDialog.event.remove(actionName);
+                (actionName!='destory') && jDialog.event.remove(actionName);
                 this.getFooter().removeChild(button);
                 var i = this.buttons.indexOf(button);
                 this.buttons.splice(i, 1);
@@ -686,7 +686,7 @@
         }
     });
 
-    /* concat from"/src/setting.js" */
+    /* concat from"\src\setting.js" */
     /**
      *  设置函数集
      * @param number
@@ -822,7 +822,7 @@
         }
     });
 
-    /* concat from"/src/components.js" */
+    /* concat from"\src\components.js" */
     /**
      *  封装一些常用的dialog
      */
@@ -849,7 +849,7 @@
         }
     });
 
-    /* concat from"/src/compatibleAMD.js" */
+    /* concat from"\src\compatibleAMD.js" */
     if (typeof define === "function" && define.amd) {
         define("jdialog", [], function() {
             return jDialog;
