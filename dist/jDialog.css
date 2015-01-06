@@ -25,6 +25,9 @@
   border: none;
   color: #fff;
 }
+.dialog.dialog-toast .dialog-body {
+  padding: 1em;
+}
 .dialog.dialog-error {
   border-color: #ebccd1;
 }
