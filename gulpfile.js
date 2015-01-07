@@ -12,6 +12,7 @@ var uglify = require('gulp-uglify');
 var csso = require('gulp-csso');
 //var livereload = require('gulp-livereload');
 //var tinylr = require('tiny-lr');
+var fs = require('fs');
 
 var jsFiles = [
     'core.js',
@@ -40,10 +41,11 @@ function addPrefixToEachItem(prefix, items) {
 var jsPath = addPrefixToEachItem('./src/', jsFiles);
 
 // TODO:文档生成
-gulp.task('docs', function() {});
+gulp.task('docs', function () {
+});
 
 //
-gulp.task('compress', function() {
+gulp.task('compress', function () {
     var compressPath = distPath + "/jDialog-" + version;
 
     gulp.src(distPath + "*.js")
@@ -57,21 +59,21 @@ gulp.task('compress', function() {
 });
 
 // 代码检查
-gulp.task('lint', function() {
+gulp.task('lint', function () {
     gulp.src(jsPath)
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
 
 // less编译
-gulp.task('less', function() {
+gulp.task('less', function () {
     gulp.src(lessPath)
         .pipe(less())
         .pipe(gulp.dest(distPath));
 });
 
 // 添加前缀，需要先做less编译
-gulp.task('ap', function() {
+gulp.task('ap', function () {
     gulp.src(distPath + '*.css').pipe(autoprefixer({
         //browsers: ['Chrome'],
         cascade: true,
@@ -80,7 +82,8 @@ gulp.task('ap', function() {
 });
 
 // 合并
-gulp.task('concat', function() {
+gulp.task('concat', function () {
+
 
     var fileHeader = '\n;(function (window, document) {\n\n';
     var fileFooter = '\n\n})(window, window.document);\n';
@@ -88,7 +91,7 @@ gulp.task('concat', function() {
     gulp.src(jsPath)
         .pipe(sourcemaps.init())
         .pipe(concat('jDialog.js', {
-            process: function(src) {
+            process: function (src) {
                 var pathComments = '\n/* concat from"' + this.path.replace(__dirname, '') + '" */\n';
                 var src = pathComments + src.trim();
                 return src.replace(/\n/g, '\n    ');
@@ -102,18 +105,18 @@ gulp.task('concat', function() {
 });
 
 // watch
-gulp.task('watch', function() {
+gulp.task('watch', function () {
     //
     gulp.src(jsPath)
-        .pipe(watch(jsPath, function() {
+        .pipe(watch(jsPath, function () {
             gulp.start('concat');
         }));
     //
     gulp.src(lessPath)
-        .pipe(watch(lessPath, function() {
+        .pipe(watch(lessPath, function () {
             gulp.start('less');
         }));
 
 });
 
-gulp.task('default', ['concat', 'less', 'watch']);
+gulp.task('default', ['concat', 'less', 'compress', 'watch']);

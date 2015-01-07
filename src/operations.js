@@ -55,7 +55,7 @@ function _renderDOM(jDialog) {
     self.verticalInViewPort(options.fixed)
         .addClass('dialog-zoom-in');
     return self;
-};
+}
 
 /**
  *
@@ -68,7 +68,7 @@ function _createElement(tagName, attrs) {
     var element = doc.createElement(tagName);
     jDialog.extend(element, attrs);
     return element;
-};
+}
 
 /**
  *
@@ -82,7 +82,7 @@ function _eventRouter(event) {
         return;
     }
     jDialog.event.fire(actionName);
-};
+}
 
 /**
  *
@@ -93,12 +93,13 @@ function _eventRouter(event) {
 function _createModal(context) {
     var self = context;
     var element = _createElement('div');
-    element.style.cssText = ';background:rgba(0,0,0,0.3);width:100%;'
-    + 'position:absolute;left:0;top:0;'
-    + 'height:'
-    + Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight)
-    + 'px;z-index:'
-    + (self.currentDOMIndex - 1);
+    element.style.cssText =
+        ';background:rgba(0,0,0,0.3);width:100%;'
+        + 'position:absolute;left:0;top:0;'
+        + 'height:'
+        + Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight)
+        + 'px;z-index:'
+        + (self.currentDOMIndex - 1);
 
     element.onclick = function () {
         if (!self.options.preventHide) {
@@ -164,7 +165,7 @@ jDialog.fn.extend({
         if (useLock) {
             header[ev] = footer[ev] = modal[ev] = function () {
                 return false;
-            }
+            };
             //doc.body.onscroll = function()
         } else {
             header[ev] = footer[ev] = modal[ev] = null;
@@ -347,7 +348,7 @@ jDialog.fn.extend({
         //if (!reg.test(className)) {
         //    className = prefix + className;
         //}
-        var context = context || this.getWrapper();
+        context = context || this.getWrapper();
         if (context.nodeType === 1 && typeof className === 'string') {
             context.classList.add(className);
         }
@@ -364,7 +365,7 @@ jDialog.fn.extend({
         //if (!reg.test(className)) {
         //    className = prefix + className;
         //}
-        var context = context || this.getWrapper();
+        context = context || this.getWrapper();
         if (context.nodeType === 1 && typeof className === 'string') {
             context.classList.remove(className);
         }
@@ -456,42 +457,46 @@ jDialog.fn.extend({
         this.getModal().style.display = '';
         return this;
     },
+    /**
+     *
+     * @param url
+     * @returns {*}
+     */
     iframe: function (url) {
         var self = this;
-        var url = url || self.options.url;
-        if (!jDialog.isUrl(url)) {
-            return self.content(url + '不是一个有效的地址');
+        var iframeSrc = url || self.options.url;
+        var callBack = null;
+        if (jDialog.isPlainObject(url)) {
+            iframeSrc = url.url;
+            callBack = url.callBack;
         }
-
+        if (!jDialog.isUrl(iframeSrc)) {
+            return self.content(iframeSrc + '不是一个有效的地址');
+        }
         var container = self.getContainer();
         var clientHeight = doc.documentElement.clientHeight;
-
-        container.style.position = 'relative';
-        this.content('<div ' +
-        'style="text-align: center;background-color: rgba(255,255,255,0.5);' +
-        'position:absolute;' +
-        'left:0;top:0;width:100%;height:100%">' +
-        'loading...</div>');
-
+        var loadingElement = _createElement('div');
+        loadingElement.style.cssText = 'height:5px;width:10%;opacity:1;' +
+        'margin-bottom:1em;background:#1abc9c;' +
+        '-webkit-transition:width ease-in 2s';
+        container.appendChild(loadingElement);
         var iframe = _createElement('iframe', {
-            frameborder: 0,
             width: '100%',
             height: clientHeight
         });
+        iframe.frameborder = 0;
         iframe.onload = function () {
-            var parent = this.parentNode;
-            var loadingElement = parent.getElementsByTagName('div')[0];
-            parent.removeChild(loadingElement);
-            iframe.onload = null;
-        }
+            loadingElement.style.width = "100%";
+            //loadingElement.style.opacity = 0;
+            callBack && callBack.call(self, true);
+            iframe.onload = loadingElement = null;
+        };
         iframe.onerror = function () {
-            // ,<a href="#nogo" onclick="">重新加载</a>
-            self.content('加载' + url + '时发生错误');
-            iframe.onerror = null;
-        }
-
+            self.content('加载' + iframeSrc + '时发生错误');
+            iframe.onload = loadingElement = null;
+        };
         container.appendChild(iframe);
-        iframe.src = url;
+        iframe.src = iframeSrc;
         return self;
     }
 });
