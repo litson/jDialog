@@ -81,7 +81,7 @@ function _eventRouter(event) {
     if (!actionName) {
         return;
     }
-    jDialog.event.fire(actionName);
+    jDialog.event.fire(actionName, target);
 }
 
 /**
@@ -114,6 +114,8 @@ jDialog.fn.extend({
 
     /**
      * 保证 position:fixed 的dialog永远处于视口内；
+     * @param useFixed
+     * @returns {*}
      */
     verticalInViewPort: function (useFixed) {
         var docElement = doc.documentElement;
@@ -273,7 +275,6 @@ jDialog.fn.extend({
      * @param handler
      * @returns {*}
      */
-
     addButton: function (text, actionName, handler) {
 
         // 模拟重载
@@ -314,7 +315,11 @@ jDialog.fn.extend({
         return this;
     },
 
-    // 如果保证每个按钮对应队里的action，则可放心移除button
+    /**
+     * 如果保证每个按钮对应队里的action，则可放心移除button
+     * @param index
+     * @returns {*}
+     */
     delButton: function (index) {
         var button = this.getButton(index);
         var actionName;
@@ -328,6 +333,11 @@ jDialog.fn.extend({
         return this;
     },
 
+    /**
+     *
+     * @param index
+     * @returns {*}
+     */
     getButton: function (index) {
         var buttons = this.buttons.slice().reverse();
         if (buttons[index]) {

@@ -3,10 +3,10 @@
  * @type {{add: Function, remove: Function, has: Function, fire: Function}}
  */
 jDialog.event = {
-    getRoot: function() {
+    getRoot: function () {
         return this.root || jDialog.currentDialog || jDialog();
     },
-    add: function(actionName, handler) {
+    add: function (actionName, handler) {
         var root = this.getRoot();
         if (!this.has(actionName)) {
             root.actions[actionName] = [];
@@ -16,7 +16,7 @@ jDialog.event = {
         }
         return this;
     },
-    remove: function(actionName) {
+    remove: function (actionName) {
         var root = this.getRoot();
         if (this.has(actionName)) {
             return delete root.actions[actionName];
@@ -24,14 +24,14 @@ jDialog.event = {
         console.warn(actionName + '不存在');
         return false;
     },
-    has: function(actionName) {
+    has: function (actionName) {
         var root = this.getRoot();
         if (typeof actionName !== 'string' || !root.actions[actionName]) {
             return false;
         }
         return true;
     },
-    once: function(actionName) {
+    once: function (actionName) {
         if (this.has(actionName)) {
             this.fire(actionName)
                 .remove(actionName);
@@ -39,7 +39,7 @@ jDialog.event = {
 
         return this;
     },
-    fire: function(actionName) {
+    fire: function (actionName, target) {
         var root = this.getRoot();
         if (this.has(actionName)) {
             var actions = root.actions[actionName];
@@ -47,7 +47,7 @@ jDialog.event = {
             if (length) {
                 var i = 0;
                 for (; i < length; i++) {
-                    actions[i].call(root);
+                    actions[i].call(root, target);
                 }
             }
         }

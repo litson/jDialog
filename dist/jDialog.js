@@ -144,10 +144,10 @@
      * @type {{add: Function, remove: Function, has: Function, fire: Function}}
      */
     jDialog.event = {
-        getRoot: function() {
+        getRoot: function () {
             return this.root || jDialog.currentDialog || jDialog();
         },
-        add: function(actionName, handler) {
+        add: function (actionName, handler) {
             var root = this.getRoot();
             if (!this.has(actionName)) {
                 root.actions[actionName] = [];
@@ -157,7 +157,7 @@
             }
             return this;
         },
-        remove: function(actionName) {
+        remove: function (actionName) {
             var root = this.getRoot();
             if (this.has(actionName)) {
                 return delete root.actions[actionName];
@@ -165,14 +165,14 @@
             console.warn(actionName + '不存在');
             return false;
         },
-        has: function(actionName) {
+        has: function (actionName) {
             var root = this.getRoot();
             if (typeof actionName !== 'string' || !root.actions[actionName]) {
                 return false;
             }
             return true;
         },
-        once: function(actionName) {
+        once: function (actionName) {
             if (this.has(actionName)) {
                 this.fire(actionName)
                     .remove(actionName);
@@ -180,7 +180,7 @@
     
             return this;
         },
-        fire: function(actionName) {
+        fire: function (actionName, target) {
             var root = this.getRoot();
             if (this.has(actionName)) {
                 var actions = root.actions[actionName];
@@ -188,7 +188,7 @@
                 if (length) {
                     var i = 0;
                     for (; i < length; i++) {
-                        actions[i].call(root);
+                        actions[i].call(root, target);
                     }
                 }
             }
@@ -280,7 +280,7 @@
         if (!actionName) {
             return;
         }
-        jDialog.event.fire(actionName);
+        jDialog.event.fire(actionName, target);
     }
     
     /**
@@ -313,6 +313,8 @@
     
         /**
          * 保证 position:fixed 的dialog永远处于视口内；
+         * @param useFixed
+         * @returns {*}
          */
         verticalInViewPort: function (useFixed) {
             var docElement = doc.documentElement;
@@ -472,7 +474,6 @@
          * @param handler
          * @returns {*}
          */
-    
         addButton: function (text, actionName, handler) {
     
             // 模拟重载
@@ -513,7 +514,11 @@
             return this;
         },
     
-        // 如果保证每个按钮对应队里的action，则可放心移除button
+        /**
+         * 如果保证每个按钮对应队里的action，则可放心移除button
+         * @param index
+         * @returns {*}
+         */
         delButton: function (index) {
             var button = this.getButton(index);
             var actionName;
@@ -527,6 +532,11 @@
             return this;
         },
     
+        /**
+         *
+         * @param index
+         * @returns {*}
+         */
         getButton: function (index) {
             var buttons = this.buttons.slice().reverse();
             if (buttons[index]) {

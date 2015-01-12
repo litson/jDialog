@@ -14,6 +14,7 @@
         "gulp-jshint": "latest",
         "gulp-uglify": "latest",
         "gulp-csso": "latest",
-        "gulp-autoprefixer": "latest"
+        "gulp-autoprefixer": "latest",
+        "gulp-size":"latest"
     }
 }

@@ -4,14 +4,14 @@ var concat = require('gulp-concat-util');
 var sourcemaps = require('gulp-sourcemaps');
 //var yuidoc = require('gulp-yuidoc');
 //var docco = require("gulp-docco");
+//var livereload = require('gulp-livereload');
+//var tinylr = require('tiny-lr');
+var size = require('gulp-size');
 var jshint = require('gulp-jshint');
 var less = require('gulp-less');
 var autoprefixer = require('gulp-autoprefixer');
 var uglify = require('gulp-uglify');
-//var size = require('gulp-size');
 var csso = require('gulp-csso');
-//var livereload = require('gulp-livereload');
-//var tinylr = require('tiny-lr');
 var fs = require('fs');
 
 var jsFiles = [
@@ -50,10 +50,20 @@ gulp.task('compress', function () {
 
     gulp.src(distPath + "*.js")
         .pipe(uglify())
+        .pipe(size({
+            showFiles: true,
+            gzip: true,
+            title: "压缩后："
+        }))
         .pipe(gulp.dest(compressPath));
 
     gulp.src(distPath + "*.css")
         .pipe(csso())
+        .pipe(size({
+            showFiles: true,
+            gzip: true,
+            title: "压缩后："
+        }))
         .pipe(gulp.dest(compressPath));
 
 });
@@ -119,4 +129,8 @@ gulp.task('watch', function () {
 
 });
 
-gulp.task('default', ['concat', 'less', 'compress', 'watch']);
+// release
+gulp.task('release', ['concat', 'less', 'compress']);
+
+//
+gulp.task('default', ['concat', 'less', 'watch']);
