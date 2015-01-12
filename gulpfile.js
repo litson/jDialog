@@ -27,7 +27,7 @@ var jsFiles = [
 var lessPath = './src/*.less';
 var distPath = './dist/';
 // todo 从package.json中获取
-var version = '1.0.1';
+var version = '1.0.0';
 
 function addPrefixToEachItem(prefix, items) {
     var i = items.length;
