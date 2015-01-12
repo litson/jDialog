@@ -13,6 +13,8 @@ jDialog
 - 3.期待你的加入
 - [See Demo](http://litson.github.io/2015/01/02/jDialog/)
 
+## Change logs
+- 为每个按钮提供1个参数，为当前操作的Button元素；
 
 ## Questions?
 [Open issues](https://github.com/litson/jDialog/issues/new)
