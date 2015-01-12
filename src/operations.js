@@ -435,7 +435,17 @@ jDialog.fn.extend({
         }
 
         this.actions = [];
-        jDialog.event.root = jDialog.currentDialog = null;
+        jDialog.event.root
+            = jDialog.currentDialog
+            = this.buttons
+            = this.container
+            = this.footer
+            = this.header
+            = this.options
+            = this.wrapper
+            = this.modal
+            = null;
+
         return this;
     },
 
