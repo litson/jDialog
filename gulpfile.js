@@ -94,7 +94,7 @@ gulp.task('ap', function () {
 // 合并
 gulp.task('concat', function () {
 
-
+    var comments = '/* \nhttps://github.com/litson/jDialog \n */';
     var fileHeader = '\n;(function (window, document) {\n\n';
     var fileFooter = '\n\n})(window, window.document);\n';
 
@@ -107,7 +107,7 @@ gulp.task('concat', function () {
                 return src.replace(/\n/g, '\n    ');
             }
         }))
-        .pipe(concat.header(fileHeader))
+        .pipe(concat.header(comments + fileHeader))
         .pipe(concat.footer(fileFooter))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(distPath));

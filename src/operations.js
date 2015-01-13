@@ -125,7 +125,7 @@ jDialog.fn.extend({
         if (useFixed) {
 
             if (dialogHeight > clientHeight) {
-                dialogHeight = clientHeight - 100;
+                dialogHeight = 0.75 * clientHeight;
                 this.getContainer().style.height =
                     dialogHeight - (this.height(this.getHeader()) + this.height(this.getFooter())) + 'px';
             }

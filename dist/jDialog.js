@@ -1,4 +1,6 @@
-
+/* 
+https://github.com/litson/jDialog 
+ */
 ;(function (window, document) {
 
 
@@ -324,7 +326,7 @@
             if (useFixed) {
     
                 if (dialogHeight > clientHeight) {
-                    dialogHeight = clientHeight - 100;
+                    dialogHeight = 0.75 * clientHeight;
                     this.getContainer().style.height =
                         dialogHeight - (this.height(this.getHeader()) + this.height(this.getFooter())) + 'px';
                 }
@@ -634,7 +636,17 @@
             }
     
             this.actions = [];
-            jDialog.event.root = jDialog.currentDialog = null;
+            jDialog.event.root
+                = jDialog.currentDialog
+                = this.buttons
+                = this.container
+                = this.footer
+                = this.header
+                = this.options
+                = this.wrapper
+                = this.modal
+                = null;
+    
             return this;
         },
     
