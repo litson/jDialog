@@ -8,7 +8,6 @@ var jDialog = function (message, callBack) {
     return new jDialog.fn.init(message, callBack);
 };
 
-
 jDialog.fn = jDialog.prototype = {
     constructor: jDialog,
     /**
@@ -48,12 +47,12 @@ jDialog.fn = jDialog.prototype = {
         }
         jDialog.currentDialog = this;
 
-        if (jDialog.isPlainObject(message)) {
+        if (isPlainObject(message)) {
             jDialog.extend(this.options, message);
 
         } else if (/string|number|boolean/gi.test(typeof(message))) {
             this.options.content = message;
-            if (jDialog.isFunction(callBack)) {
+            if (isFunction(callBack)) {
                 this.options.callBack = callBack;
             }
         } else {

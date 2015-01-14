@@ -169,11 +169,11 @@ jDialog.fn.extend({
         var fnKey = ("jDialog" + Math.random()).replace(/\D/g, '');
         var defaultText = '确定';
         // 如果第一个参数是一个function
-        if (jDialog.isFunction(text)) {
+        if (isFunction(text)) {
             return this.addButton(defaultText, actionName || fnKey, text);
         }
 
-        if (jDialog.isFunction(actionName)) {
+        if (isFunction(actionName)) {
             return this.addButton(text, fnKey, actionName);
         }
 
@@ -376,11 +376,11 @@ jDialog.fn.extend({
         var self = this;
         var iframeSrc = url || self.options.url;
         var callBack = null;
-        if (jDialog.isPlainObject(url)) {
+        if (isPlainObject(url)) {
             iframeSrc = url.url;
             callBack = url.callBack;
         }
-        if (!jDialog.isUrl(iframeSrc)) {
+        if (!isUrl(iframeSrc)) {
             return self.content(iframeSrc + '不是一个有效的地址');
         }
         var container = self.getContainer();

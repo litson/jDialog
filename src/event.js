@@ -11,7 +11,7 @@ jDialog.event = {
         if (!this.has(actionName)) {
             root.actions[actionName] = [];
         }
-        if (jDialog.isFunction(handler)) {
+        if (isFunction(handler)) {
             root.actions[actionName].push(handler);
         }
         return this;

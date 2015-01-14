@@ -15,7 +15,6 @@ https://github.com/litson/jDialog
         return new jDialog.fn.init(message, callBack);
     };
     
-    
     jDialog.fn = jDialog.prototype = {
         constructor: jDialog,
         /**
@@ -55,12 +54,12 @@ https://github.com/litson/jDialog
             }
             jDialog.currentDialog = this;
     
-            if (jDialog.isPlainObject(message)) {
+            if (isPlainObject(message)) {
                 jDialog.extend(this.options, message);
     
             } else if (/string|number|boolean/gi.test(typeof(message))) {
                 this.options.content = message;
-                if (jDialog.isFunction(callBack)) {
+                if (isFunction(callBack)) {
                     this.options.callBack = callBack;
                 }
             } else {
@@ -235,38 +234,43 @@ https://github.com/litson/jDialog
     }
 
     /* concat from"\src\helper.js" */
+    /**
+     *
+     * @param fn
+     * @returns {boolean}
+     */
+    function isFunction(fn) {
+        return Object.prototype.toString.call(fn) === '[object Function]';
+    }
+    
+    /**
+     *
+     * @param obj
+     * @returns {boolean}
+     */
+    function isPlainObject(obj) {
+        if (obj === null || obj === undefined) {
+            return false;
+        }
+        return obj.constructor == {}.constructor;
+    }
+    
+    /**
+     *
+     * @param url
+     * @returns {boolean}
+     */
+    function isUrl(url) {
+        var regexp =
+            /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+        return regexp.test(url);
+    }
+    
     jDialog.extend({
-        /**
-         * is function
-         * @param fn
-         * @returns {boolean}
-         */
-        isFunction: function(fn) {
-            return Object.prototype.toString.call(fn) === '[object Function]';
-        },
-    
-        /**
-         * 简单高效
-         * @param obj
-         * @returns {boolean}
-         */
-        isPlainObject: function(obj) {
-            if (obj === null || obj === undefined) {
-                return false;
-            }
-            return obj.constructor == {}.constructor;
-        },
-    
-        isUrl: function(url) {
-            var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-            return regexp.test(url);
-        },
-    
         /**
          * 顶级缓存对象，目前没什么用
          */
         expando: "jDialog" + (version + Math.random()).replace(/\D/g, '')
-    
     });
 
     /* concat from"\src\event.js" */
@@ -283,7 +287,7 @@ https://github.com/litson/jDialog
             if (!this.has(actionName)) {
                 root.actions[actionName] = [];
             }
-            if (jDialog.isFunction(handler)) {
+            if (isFunction(handler)) {
                 root.actions[actionName].push(handler);
             }
             return this;
@@ -499,11 +503,11 @@ https://github.com/litson/jDialog
             var fnKey = ("jDialog" + Math.random()).replace(/\D/g, '');
             var defaultText = '确定';
             // 如果第一个参数是一个function
-            if (jDialog.isFunction(text)) {
+            if (isFunction(text)) {
                 return this.addButton(defaultText, actionName || fnKey, text);
             }
     
-            if (jDialog.isFunction(actionName)) {
+            if (isFunction(actionName)) {
                 return this.addButton(text, fnKey, actionName);
             }
     
@@ -706,11 +710,11 @@ https://github.com/litson/jDialog
             var self = this;
             var iframeSrc = url || self.options.url;
             var callBack = null;
-            if (jDialog.isPlainObject(url)) {
+            if (isPlainObject(url)) {
                 iframeSrc = url.url;
                 callBack = url.callBack;
             }
-            if (!jDialog.isUrl(iframeSrc)) {
+            if (!isUrl(iframeSrc)) {
                 return self.content(iframeSrc + '不是一个有效的地址');
             }
             var container = self.getContainer();
