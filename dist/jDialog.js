@@ -8,7 +8,7 @@ https://github.com/litson/jDialog
     var win = window;
     var doc = document;
     var version = '1.0.0';
-    var jDialog = function(message, callBack) {
+    var jDialog = function (message, callBack) {
         /**
          *
          */
@@ -24,7 +24,7 @@ https://github.com/litson/jDialog
          * @param callBack
          * @returns {jDialog}
          */
-        init: function(message, callBack) {
+        init: function (message, callBack) {
     
             this.options = {
                 title: '提示', // title
@@ -77,7 +77,7 @@ https://github.com/litson/jDialog
      * 浅copy
      * @returns {*|{}}
      */
-    jDialog.extend = jDialog.fn.extend = function() {
+    jDialog.extend = jDialog.fn.extend = function () {
     
         var target = arguments[0] || {};
         var options = arguments[1] || {};
@@ -104,6 +104,135 @@ https://github.com/litson/jDialog
      * @type {{constructor: Function, init: Function}|jDialog.fn|*}
      */
     jDialog.fn.init.prototype = jDialog.fn;
+    
+    /**
+     *
+     * @param jDialog
+     * @private
+     */
+    function _renderDOM(jDialog) {
+        var self = jDialog;
+        var wrapper = self.getWrapper();
+        var options = self.options;
+    
+        wrapper
+            .appendChild(self.getHeader());
+        wrapper
+            .appendChild(self.getContainer());
+        wrapper
+            .appendChild(self.getFooter());
+    
+        if (options.title === '') {
+            self.hideHeader();
+        }
+    
+        self.title(options.title);
+    
+        //
+    
+        if (options.url) {
+            self.iframe(options.url);
+    
+        } else {
+            self.content(options.content);
+    
+        }
+    
+        self.addButton('取消', 'destory', function () {
+            self.remove();
+        });
+    
+        //
+        if (options.modal) {
+            self.showModal();
+        }
+    
+        if (options.autoHide) {
+            self.autoHide(options.autoHide);
+        }
+    
+        //
+        if (options.callBack) {
+            self.addButton('确定', 'apply', options.callBack);
+        }
+    
+        wrapper.addEventListener('click', _eventRouter.bind(self), false);
+        wrapper.addEventListener('touchstart', _toggleClass, false);
+        wrapper.addEventListener('touchend', _toggleClass, false);
+    
+        doc.body.appendChild(wrapper);
+    
+        self.verticalInViewPort(options.fixed)
+            .addClass('dialog-zoom-in');
+        return self;
+    }
+    
+    /**
+     *
+     * @param tagName
+     * @param attrs
+     * @returns {HTMLElement}
+     * @private
+     */
+    function _createElement(tagName, attrs) {
+        var element = doc.createElement(tagName);
+        jDialog.extend(element, attrs);
+        return element;
+    }
+    
+    /**
+     *
+     * @param event
+     * @private
+     */
+    function _eventRouter(event) {
+        var target = event.target;
+        var actionName = target.getAttribute('data-dialog-action');
+        if (!actionName) {
+            return;
+        }
+        jDialog.event.fire(actionName, target);
+    }
+    
+    /**
+     *
+     * @param event
+     * @private
+     */
+    function _toggleClass(event) {
+        var target = event.target;
+        var actionName = target.getAttribute('data-dialog-action');
+        if (!actionName) {
+            return;
+        }
+        target.classList.toggle('active');
+    }
+    
+    /**
+     *
+     * @param context
+     * @returns {HTMLElement}
+     * @private
+     */
+    function _createModal(context) {
+        var self = context;
+        var element = _createElement('div');
+        element.style.cssText =
+            ';background:rgba(0,0,0,0.3);width:100%;'
+            + 'position:absolute;left:0;top:0;'
+            + 'height:'
+            + Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight)
+            + 'px;z-index:'
+            + (self.currentDOMIndex - 1);
+    
+        element.onclick = function () {
+            if (!self.options.preventHide) {
+                jDialog.event.fire('destory');
+            }
+        };
+        doc.body.appendChild(element);
+        return element;
+    }
 
     /* concat from"\src\helper.js" */
     jDialog.extend({
@@ -199,118 +328,6 @@ https://github.com/litson/jDialog
     };
 
     /* concat from"\src\operations.js" */
-    /**
-     *
-     * @param jDialog
-     * @private
-     */
-    function _renderDOM(jDialog) {
-        var self = jDialog;
-        var wrapper = self.getWrapper();
-        var options = self.options;
-    
-        wrapper
-            .appendChild(self.getHeader());
-        wrapper
-            .appendChild(self.getContainer());
-        wrapper
-            .appendChild(self.getFooter());
-    
-        if (options.title === '') {
-            self.hideHeader();
-        }
-    
-        self.title(options.title);
-    
-        //
-    
-        if (options.url) {
-            self.iframe(options.url);
-    
-        } else {
-            self.content(options.content);
-    
-        }
-    
-        self.addButton('取消', 'destory', function () {
-            self.remove();
-        });
-    
-        //
-        if (options.modal) {
-            self.showModal();
-        }
-    
-        if (options.autoHide) {
-            self.autoHide(options.autoHide);
-        }
-    
-        //
-        if (options.callBack) {
-            self.addButton('确定', 'apply', options.callBack);
-        }
-    
-        wrapper.addEventListener('click', _eventRouter.bind(self), false);
-        doc.body.appendChild(wrapper);
-    
-        self.verticalInViewPort(options.fixed)
-            .addClass('dialog-zoom-in');
-        return self;
-    }
-    
-    /**
-     *
-     * @param tagName
-     * @param attrs
-     * @returns {HTMLElement}
-     * @private
-     */
-    function _createElement(tagName, attrs) {
-        var element = doc.createElement(tagName);
-        jDialog.extend(element, attrs);
-        return element;
-    }
-    
-    /**
-     *
-     * @param event
-     * @private
-     */
-    function _eventRouter(event) {
-        var target = event.target;
-        var actionName = target.getAttribute('data-dialog-action');
-        if (!actionName) {
-            return;
-        }
-        jDialog.event.fire(actionName, target);
-    }
-    
-    /**
-     *
-     * @param context
-     * @returns {HTMLElement}
-     * @private
-     */
-    function _createModal(context) {
-        var self = context;
-        var element = _createElement('div');
-        element.style.cssText =
-            ';background:rgba(0,0,0,0.3);width:100%;'
-            + 'position:absolute;left:0;top:0;'
-            + 'height:'
-            + Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight)
-            + 'px;z-index:'
-            + (self.currentDOMIndex - 1);
-    
-        element.onclick = function () {
-            if (!self.options.preventHide) {
-                jDialog.event.fire('destory');
-            }
-        };
-        doc.body.appendChild(element);
-        return element;
-    }
-    
     jDialog.fn.extend({
     
         /**
@@ -625,6 +642,8 @@ https://github.com/litson/jDialog
             this.toggleLockBody(false);
             if (this.wrapper) {
                 this.wrapper.removeEventListener('click', _eventRouter, false);
+                this.wrapper.addEventListener('touchstart', _toggleClass, false);
+                this.wrapper.addEventListener('touchend', _toggleClass, false);
                 doc.body.removeChild(this.wrapper);
             }
             if (this.modal) {

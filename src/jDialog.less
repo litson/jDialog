@@ -27,7 +27,7 @@
     background-color: rgba(0, 0, 0, .4);
     border: none;
     color: #fff;
-    .dialog-body{
+    .dialog-body {
       padding: 1em;
     }
   }
@@ -73,7 +73,7 @@
 // buttons;
 .dialog-btn {
   -webkit-box-flex: 1;
-    box-flex: 1;
+  box-flex: 1;
   display: block;
   text-decoration: none;
   text-align: center;
@@ -82,6 +82,10 @@
   color: inherit;
   padding: .8em 0;
   margin: .8em;
+  -webkit-user-select: none;
+  &.active {
+    opacity: .7;
+  }
 }
 
 // primary btn

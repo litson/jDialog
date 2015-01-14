@@ -67,6 +67,10 @@
   color: inherit;
   padding: .8em 0;
   margin: .8em;
+  -webkit-user-select: none;
+}
+.dialog-btn.active {
+  opacity: .7;
 }
 .dialog-btn-primary {
   border-color: #e94543;
