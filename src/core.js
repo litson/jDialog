@@ -222,7 +222,7 @@ function _createModal(context) {
             jDialog.event.fire('destory');
         }
     };
-    doc.body.appendChild(element);
-    return element;
+
+    return doc.body.appendChild(element)
 }
 
