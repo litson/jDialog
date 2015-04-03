@@ -3,30 +3,25 @@
  * @type {{add: Function, remove: Function, has: Function, fire: Function}}
  */
 jDialog.event = {
-    getRoot: function () {
-        return this.root || jDialog.currentDialog || jDialog();
-    },
+    actions: {},
     add: function (actionName, handler) {
-        var root = this.getRoot();
         if (!this.has(actionName)) {
-            root.actions[actionName] = [];
+            this.actions[actionName] = [];
         }
         if (isFunction(handler)) {
-            root.actions[actionName].push(handler);
+            this.actions[actionName].push(handler);
         }
         return this;
     },
     remove: function (actionName) {
-        var root = this.getRoot();
         if (this.has(actionName)) {
-            return delete root.actions[actionName];
+            return delete this.actions[actionName];
         }
         console.warn(actionName + '不存在');
         return false;
     },
     has: function (actionName) {
-        var root = this.getRoot();
-        if (typeof actionName !== 'string' || !root.actions[actionName]) {
+        if (typeof actionName !== 'string' || !this.actions[actionName]) {
             return false;
         }
         return true;
@@ -36,18 +31,16 @@ jDialog.event = {
             this.fire(actionName)
                 .remove(actionName);
         }
-
         return this;
     },
     fire: function (actionName, target) {
-        var root = this.getRoot();
         if (this.has(actionName)) {
-            var actions = root.actions[actionName];
+            var actions = this.actions[actionName];
             var length = actions.length;
             if (length) {
                 var i = 0;
                 for (; i < length; i++) {
-                    actions[i].call(root, target);
+                    actions[i].call(jDialog.currentDialog || jDialog(), target);
                 }
             }
         }
