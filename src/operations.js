@@ -324,9 +324,8 @@ jDialog.fn.extend({
             clearTimeout(this.autoHideTimer);
         }
 
-        this.actions = [];
-        jDialog.event.root
-            = jDialog.currentDialog
+        // this.actions = [];
+        jDialog.currentDialog
             = this.buttons
             = this.container
             = this.footer

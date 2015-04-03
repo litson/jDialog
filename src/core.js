@@ -38,7 +38,7 @@ jDialog.fn = jDialog.prototype = {
             // iframe
             url: null
         };
-        this.actions = {};
+        // this.actions = {};
         this.buttons = [];
         jDialog.event.root = this;
         // 只存活一个dialog
