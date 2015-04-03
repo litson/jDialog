@@ -1,7 +1,4 @@
-/**
- *
- * @type {{add: Function, remove: Function, has: Function, fire: Function}}
- */
+
 jDialog.event = {
     actions: {},
     add: function (actionName, handler) {
