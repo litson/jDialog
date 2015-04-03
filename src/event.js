@@ -2,12 +2,17 @@
 jDialog.event = {
     actions: {},
     add: function (actionName, handler) {
-        if (!this.has(actionName)) {
-            this.actions[actionName] = [];
-        }
+        
         if (isFunction(handler)) {
-            this.actions[actionName].push(handler);
+            this.actions[actionName] = handler;
         }
+        
+        // if (!this.has(actionName)) {
+        //     this.actions[actionName] = [];
+        // }
+        // if (isFunction(handler)) {
+        //     this.actions[actionName].push(handler);
+        // }
         return this;
     },
     remove: function (actionName) {
@@ -32,14 +37,17 @@ jDialog.event = {
     },
     fire: function (actionName, target) {
         if (this.has(actionName)) {
-            var actions = this.actions[actionName];
-            var length = actions.length;
-            if (length) {
-                var i = 0;
-                for (; i < length; i++) {
-                    actions[i].call(jDialog.currentDialog || jDialog(), target);
-                }
-            }
+            
+            this.actions[actionName].call(jDialog.currentDialog || jDialog(), target);
+            
+            // var actions = this.actions[actionName];
+            // var length = actions.length;
+            // if (length) {
+            //     var i = 0;
+            //     for (; i < length; i++) {
+            //         actions[i].call(jDialog.currentDialog || jDialog(), target);
+            //     }
+            // }
         }
         return this;
     }
