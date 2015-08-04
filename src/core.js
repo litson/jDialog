@@ -34,9 +34,7 @@ jDialog.fn = jDialog.prototype = {
              *  点击modal不会销毁
              */
             preventHide: false,
-            callBack: null,
-            // iframe
-            url: null
+            callBack: null
         };
         // this.actions = {};
         this.buttons = [];
@@ -121,14 +119,7 @@ function _renderDOM(jDialog) {
     self.title(options.title);
 
     //
-
-    if (options.url) {
-        self.iframe(options.url);
-
-    } else {
-        self.content(options.content);
-
-    }
+    self.content(options.content);
 
     self.addButton('取消', 'destory', function () {
         self.remove();

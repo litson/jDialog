@@ -24,11 +24,11 @@ function isPlainObject(obj) {
  * @param url
  * @returns {boolean}
  */
-function isUrl(url) {
-    var regexp =
-        /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-    return regexp.test(url);
-}
+//function isUrl(url) {
+//    var regexp =
+//        /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+//    return regexp.test(url);
+//}
 
 jDialog.extend({
     /**

@@ -52,23 +52,10 @@ jDialog.fn.extend({
         var modal = this.getModal();
         var ev = 'ontouchmove';
 
-        if (useLock) {
-            header[ev] = footer[ev] = modal[ev] = function () {
-                return false;
-            };
-            //doc.body.onscroll = function()
-        } else {
-            header[ev] = footer[ev] = modal[ev] = null;
-        }
+        header[ev] = footer[ev] = modal[ev] = useLock ? function () {
+            return false;
+        } : null;
 
-        //        var height = '';
-        //        var hiddenType = '';
-        //        if (useLock) {
-        //            height = '100%';
-        //            hiddenType = 'hidden';
-        //        }
-        //        doc.body.style.height = height;
-        //        doc.body.style.overflow = hiddenType;
         return this;
     },
 
@@ -167,7 +154,9 @@ jDialog.fn.extend({
 
         // 模拟重载
         var fnKey = ("jDialog" + Math.random()).replace(/\D/g, '');
+
         var defaultText = '确定';
+
         // 如果第一个参数是一个function
         if (isFunction(text)) {
             return this.addButton(defaultText, actionName || fnKey, text);
@@ -189,6 +178,7 @@ jDialog.fn.extend({
         } else {
             jDialog.event.add(actionName, handler);
         }
+
         element.setAttribute('data-dialog-action', actionName);
 
         var footer = this.getFooter();
@@ -240,16 +230,13 @@ jDialog.fn.extend({
      * @returns {*}
      */
     addClass: function (className, context) {
-        // 自动补齐前缀
-        //var prefix = this.options.prefix;
-        //var reg = new RegExp('^' + prefix, 'gi');
-        //if (!reg.test(className)) {
-        //    className = prefix + className;
-        //}
+
         context = context || this.getWrapper();
+
         if (context.nodeType === 1 && typeof className === 'string') {
             context.classList.add(className);
         }
+
         return this;
     },
 
@@ -258,12 +245,9 @@ jDialog.fn.extend({
      * @param className
      */
     removeClass: function (className, context) {
-        //var prefix = this.options.prefix;
-        //var reg = new RegExp('^' + prefix, 'gi');
-        //if (!reg.test(className)) {
-        //    className = prefix + className;
-        //}
+
         context = context || this.getWrapper();
+
         if (context.nodeType === 1 && typeof className === 'string') {
             context.classList.remove(className);
         }
@@ -309,22 +293,25 @@ jDialog.fn.extend({
      * @returns {*}
      */
     remove: function () {
+
         this.toggleLockBody(false);
+
         if (this.wrapper) {
             this.wrapper.removeEventListener('click', _eventRouter, false);
-            this.wrapper.addEventListener('touchstart', _toggleClass, false);
-            this.wrapper.addEventListener('touchend', _toggleClass, false);
+            this.wrapper.removeEventListener('touchstart', _toggleClass, false);
+            this.wrapper.removeEventListener('touchend', _toggleClass, false);
             doc.body.removeChild(this.wrapper);
         }
+
         if (this.modal) {
             this.modal.onclick = null;
             doc.body.removeChild(this.modal);
         }
+
         if (this.autoHideTimer) {
             clearTimeout(this.autoHideTimer);
         }
 
-        // this.actions = [];
         jDialog.currentDialog
             = this.buttons
             = this.container
@@ -365,47 +352,5 @@ jDialog.fn.extend({
     showModal: function () {
         this.getModal().style.display = '';
         return this;
-    },
-    /**
-     *
-     * @param url
-     * @returns {*}
-     */
-    iframe: function (url) {
-        var self = this;
-        var iframeSrc = url || self.options.url;
-        var callBack = null;
-        if (isPlainObject(url)) {
-            iframeSrc = url.url;
-            callBack = url.callBack;
-        }
-        if (!isUrl(iframeSrc)) {
-            return self.content(iframeSrc + '不是一个有效的地址');
-        }
-        var container = self.getContainer();
-        var clientHeight = doc.documentElement.clientHeight;
-        var loadingElement = _createElement('div');
-        loadingElement.style.cssText = 'height:5px;width:10%;opacity:1;' +
-        'margin-bottom:1em;background:#1abc9c;' +
-        '-webkit-transition:width ease-in 2s';
-        container.appendChild(loadingElement);
-        var iframe = _createElement('iframe', {
-            width: '100%',
-            height: clientHeight
-        });
-        iframe.frameborder = 0;
-        iframe.onload = function () {
-            loadingElement.style.width = "100%";
-            //loadingElement.style.opacity = 0;
-            callBack && callBack.call(self, true);
-            iframe.onload = loadingElement = null;
-        };
-        iframe.onerror = function () {
-            self.content('加载' + iframeSrc + '时发生错误');
-            iframe.onload = loadingElement = null;
-        };
-        container.appendChild(iframe);
-        iframe.src = iframeSrc;
-        return self;
     }
 });

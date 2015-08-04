@@ -31,7 +31,7 @@ jDialog.fn.extend({
      * @returns {*}
      */
     content: function (value) {
-        if (value === undefined) {
+        if (typeof value === 'undefined') {
             return this.options.content;
         }
         this.getContainer().innerHTML = this.options.content = value;
@@ -45,7 +45,7 @@ jDialog.fn.extend({
      */
     height: function (value) {
 
-        if (value === undefined) {
+        if (typeof value === 'undefined') {
             return this.height(this.getWrapper());
         }
 
@@ -63,18 +63,19 @@ jDialog.fn.extend({
      * @returns {*}
      */
     width: function (value) {
-        if (value === undefined) {
+        if (typeof value === 'undefined') {
             return this.width(this.getWrapper());
         }
 
         if (value.nodeType === 1) {
             return value.offsetWidth;
         }
+
         jDialog.extend(this.wrapper.style, {
             width: addPixelUnit(value),
             marginLeft: addPixelUnit(-(parseFloat(value) / 2))
         });
-        //.width = addPixelUnit(value);
+
         return this;
     },
 
@@ -84,7 +85,7 @@ jDialog.fn.extend({
      * @returns {*}
      */
     index: function (value) {
-        if (value === undefined) {
+        if (typeof value === 'undefined') {
             return this.currentDOMIndex;
         }
         this.currentDOMIndex = value;
@@ -100,15 +101,16 @@ jDialog.fn.extend({
      * @returns {*}
      */
     top: function (value) {
-        if (value === undefined) {
+
+        if (typeof value === 'undefined') {
             return win.getComputedStyle(this.getWrapper()).top;
         }
-        jDialog.extend(this.wrapper.style,{
-            top:addPixelUnit(value),
-            marginTop:''
+
+        jDialog.extend(this.wrapper.style, {
+            top: addPixelUnit(value),
+            marginTop: ''
         });
-        //this.wrapper.style.top = addPixelUnit(value);
-        //this.wrapper.style.bottom = '';
+
         return this;
     },
 
@@ -126,13 +128,9 @@ jDialog.fn.extend({
         return this.verticalInViewPort(flag);
     },
 
-    // 为了防止歧义而存在
-    absolute: function () {
-        return this.fixed(false);
-    },
-
     /**
      *
+     * @returns {preventHide}
      */
     preventHide: function () {
         this.options.preventHide = true;
