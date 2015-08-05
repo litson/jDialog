@@ -42,6 +42,7 @@
   -webkit-transform: scale(1);
 }
 .dialog-header {
+  position: relative;
   text-indent: 1em;
   height: 3em;
   line-height: 3em;
@@ -76,4 +77,8 @@
   border-color: #e94543;
   color: #fff;
   background-color: #e94543;
+}
+.dialog-btn-dismiss {
+  position: absolute;
+  right: 1em;
 }

@@ -30,12 +30,6 @@ https://github.com/litson/jDialog
                 modal: true, //是否启用模式窗口
                 content: '', // messages
                 autoHide: 0, // 自动销毁
-                /**
-                 *  对话框class前缀，默认无
-                 *  强制使用BEM规范
-                 *  前缀在所有的dom结构上，均会被添加
-                 */
-                prefix: '',
                 fixed: true,
                 /**
                  *  点击modal不会销毁
@@ -43,13 +37,14 @@ https://github.com/litson/jDialog
                 preventHide: false,
                 callBack: null
             };
-            // this.actions = {};
+    
             this.buttons = [];
-            jDialog.event.root = this;
+    
             // 只存活一个dialog
             if (jDialog.currentDialog) {
                 jDialog.currentDialog.remove();
             }
+    
             jDialog.currentDialog = this;
     
             if (isPlainObject(message)) {
@@ -64,9 +59,8 @@ https://github.com/litson/jDialog
                 return this;
             }
     
-            _renderDOM(this);
     
-            return this;
+            return _renderDOM(this);
         }
     };
     
@@ -118,6 +112,7 @@ https://github.com/litson/jDialog
             .appendChild(self.getContainer());
         wrapper
             .appendChild(self.getFooter());
+    
     
         if (options.title === '') {
             self.hideHeader();
@@ -371,9 +366,9 @@ https://github.com/litson/jDialog
          */
         getWrapper: function () {
             if (!this.wrapper) {
-                var prefix = this.options.prefix;
+    
                 this.wrapper = _createElement('div', {
-                    className: prefix + 'dialog'
+                    className: 'dialog'
                 });
     
                 this.wrapper.style.zIndex = this.currentDOMIndex = 614;
@@ -387,13 +382,9 @@ https://github.com/litson/jDialog
          * @returns {HTMLElement|*|header}
          */
         getHeader: function () {
-            if (!this.header) {
-                var prefix = this.options.prefix;
-                this.header = _createElement('div', {
-                    className: prefix + 'dialog-header'
-                });
-            }
-            return this.header;
+            return this.header ? this.header : this.header = _createElement('div', {
+                className: 'dialog-header'
+            });
         },
     
         /**
@@ -413,13 +404,9 @@ https://github.com/litson/jDialog
          * @returns {HTMLElement|*|container}
          */
         getContainer: function () {
-            if (!this.container) {
-                var prefix = this.options.prefix;
-                this.container = _createElement('div', {
-                    className: prefix + 'dialog-body'
-                });
-            }
-            return this.container;
+            return this.container ? this.container : this.container = _createElement('div', {
+                className: 'dialog-body'
+            });
         },
     
         /**
@@ -427,13 +414,9 @@ https://github.com/litson/jDialog
          * @returns {HTMLElement|*|footer}
          */
         getFooter: function () {
-            if (!this.footer) {
-                var prefix = this.options.prefix;
-                this.footer = _createElement('div', {
-                    className: prefix + 'dialog-footer'
-                });
-            }
-            return this.footer;
+            return this.footer ? this.footer : this.footer = _createElement('div', {
+                className: 'dialog-footer'
+            });
         },
     
         /**
@@ -472,10 +455,10 @@ https://github.com/litson/jDialog
                 return this.addButton(text, fnKey, actionName);
             }
     
-            var prefix = this.options.prefix;
+    
             var element = _createElement('a', {
                 href: 'javascript:;',
-                className: prefix + 'dialog-btn',
+                className: 'dialog-btn',
                 innerHTML: text || defaultText
             });
     
@@ -658,6 +641,17 @@ https://github.com/litson/jDialog
         showModal: function () {
             this.getModal().style.display = '';
             return this;
+        },
+    
+        getCloseBtn: function () {
+            if (!this.closeBtn) {
+                this.closeBtn = _createElement('span', {
+                    innerHTML: '关闭',
+                    'data-dialog-action': 'destory',
+                    className: 'dialog-btn-dismiss'
+                });
+            }
+            return this.closeBtn;
         }
     });
 
@@ -685,6 +679,7 @@ https://github.com/litson/jDialog
             if (typeof value === 'undefined') {
                 return this.options.title;
             }
+    
             this.getHeader().innerHTML = this.options.title = value;
             return this;
         },

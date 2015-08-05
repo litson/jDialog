@@ -23,12 +23,6 @@ jDialog.fn = jDialog.prototype = {
             modal: true, //是否启用模式窗口
             content: '', // messages
             autoHide: 0, // 自动销毁
-            /**
-             *  对话框class前缀，默认无
-             *  强制使用BEM规范
-             *  前缀在所有的dom结构上，均会被添加
-             */
-            prefix: '',
             fixed: true,
             /**
              *  点击modal不会销毁
@@ -36,13 +30,14 @@ jDialog.fn = jDialog.prototype = {
             preventHide: false,
             callBack: null
         };
-        // this.actions = {};
+
         this.buttons = [];
-        jDialog.event.root = this;
+
         // 只存活一个dialog
         if (jDialog.currentDialog) {
             jDialog.currentDialog.remove();
         }
+
         jDialog.currentDialog = this;
 
         if (isPlainObject(message)) {
@@ -57,9 +52,8 @@ jDialog.fn = jDialog.prototype = {
             return this;
         }
 
-        _renderDOM(this);
 
-        return this;
+        return _renderDOM(this);
     }
 };
 
@@ -111,6 +105,7 @@ function _renderDOM(jDialog) {
         .appendChild(self.getContainer());
     wrapper
         .appendChild(self.getFooter());
+
 
     if (options.title === '') {
         self.hideHeader();

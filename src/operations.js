@@ -65,9 +65,9 @@ jDialog.fn.extend({
      */
     getWrapper: function () {
         if (!this.wrapper) {
-            var prefix = this.options.prefix;
+
             this.wrapper = _createElement('div', {
-                className: prefix + 'dialog'
+                className: 'dialog'
             });
 
             this.wrapper.style.zIndex = this.currentDOMIndex = 614;
@@ -81,13 +81,9 @@ jDialog.fn.extend({
      * @returns {HTMLElement|*|header}
      */
     getHeader: function () {
-        if (!this.header) {
-            var prefix = this.options.prefix;
-            this.header = _createElement('div', {
-                className: prefix + 'dialog-header'
-            });
-        }
-        return this.header;
+        return this.header ? this.header : this.header = _createElement('div', {
+            className: 'dialog-header'
+        });
     },
 
     /**
@@ -107,13 +103,9 @@ jDialog.fn.extend({
      * @returns {HTMLElement|*|container}
      */
     getContainer: function () {
-        if (!this.container) {
-            var prefix = this.options.prefix;
-            this.container = _createElement('div', {
-                className: prefix + 'dialog-body'
-            });
-        }
-        return this.container;
+        return this.container ? this.container : this.container = _createElement('div', {
+            className: 'dialog-body'
+        });
     },
 
     /**
@@ -121,13 +113,9 @@ jDialog.fn.extend({
      * @returns {HTMLElement|*|footer}
      */
     getFooter: function () {
-        if (!this.footer) {
-            var prefix = this.options.prefix;
-            this.footer = _createElement('div', {
-                className: prefix + 'dialog-footer'
-            });
-        }
-        return this.footer;
+        return this.footer ? this.footer : this.footer = _createElement('div', {
+            className: 'dialog-footer'
+        });
     },
 
     /**
@@ -166,10 +154,10 @@ jDialog.fn.extend({
             return this.addButton(text, fnKey, actionName);
         }
 
-        var prefix = this.options.prefix;
+
         var element = _createElement('a', {
             href: 'javascript:;',
-            className: prefix + 'dialog-btn',
+            className: 'dialog-btn',
             innerHTML: text || defaultText
         });
 
@@ -352,5 +340,16 @@ jDialog.fn.extend({
     showModal: function () {
         this.getModal().style.display = '';
         return this;
+    },
+
+    getCloseBtn: function () {
+        if (!this.closeBtn) {
+            this.closeBtn = _createElement('span', {
+                innerHTML: '关闭',
+                'data-dialog-action': 'destory',
+                className: 'dialog-btn-dismiss'
+            });
+        }
+        return this.closeBtn;
     }
 });
