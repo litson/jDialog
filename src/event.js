@@ -1,37 +1,21 @@
 jDialog.event = {
     actions: {},
-    add: function (actionName, handler) {
-
-        if (isFunction(handler)) {
-            this.actions[actionName] = handler;
-        }
-
+    add    : function ( actionName, handler ) {
+        this.actions[actionName] = handler;
         return this;
     },
-    remove: function (actionName) {
-        if (this.has(actionName)) {
-            return delete this.actions[actionName];
-        }
-        console.warn(actionName + '不存在');
-        return false;
+    remove : function ( actionName ) {
+        return delete this.actions[actionName];
     },
-    has: function (actionName) {
-        if (typeof actionName !== 'string' || !this.actions[actionName]) {
-            return false;
-        }
-        return true;
+    has    : function ( actionName ) {
+        return !!this.actions[actionName];
     },
-    once: function (actionName) {
-        if (this.has(actionName)) {
-            this.fire(actionName)
-                .remove(actionName);
-        }
-        return this;
+    once   : function ( actionName ) {
+        return this.has( actionName )
+            && this.fire( actionName ).remove( actionName );
     },
-    fire: function (actionName, context) {
-        if (this.has(actionName)) {
-            this.actions[actionName].call(context || win);
-        }
+    fire   : function ( actionName, context ) {
+        this.has( actionName ) && this.actions[actionName].call( context || win );
         return this;
     }
 };

@@ -1,81 +1,58 @@
-var win = window;
-var doc = document;
-var version = '1.0.0';
-var jDialog = function (message, callBack) {
-    /**
-     *
-     */
-    return new jDialog.fn.init(message, callBack);
+var win     = window;
+var doc     = document;
+var version = '1.1.0';
+var jDialog = function ( message, callBack ) {
+    return new jDialog.fn.init( message, callBack );
 };
 
 jDialog.fn = jDialog.prototype = {
     constructor: jDialog,
-    /**
-     * @method init
-     * @param message
-     * @param callBack
-     * @returns {jDialog}
-     */
-    init: function (message, callBack) {
+
+    init: function ( message, callBack ) {
 
         this.options = {
-            title: '提示', // title
-            modal: true, //是否启用模式窗口
-            content: '', // messages
-            autoHide: 0, // 自动销毁
-            fixed: true,
-            /**
-             *  点击modal不会销毁
-             */
+            title      : '提示', // title
+            modal      : true, //是否启用模式窗口
+            content    : '', // messages
+            autoHide   : 0, // 自动销毁
+            fixed      : true,
             preventHide: false,
-            callBack: null
+            callBack   : null
         };
 
         this.buttons = [];
 
-        // 只存活一个dialog
-        if (jDialog.currentDialog) {
-            jDialog.currentDialog.remove();
-        }
+        if ( isPlainObject( message ) ) {
+            jDialog.extend( this.options, message );
 
-        jDialog.currentDialog = this;
-
-        if (isPlainObject(message)) {
-            jDialog.extend(this.options, message);
-
-        } else if (/string|number|boolean/gi.test(typeof(message))) {
+        } else if ( /string|number|boolean/gi.test( typeof(message) ) ) {
             this.options.content = message;
-            if (isFunction(callBack)) {
+            if ( isFunction( callBack ) ) {
                 this.options.callBack = callBack;
             }
         } else {
             return this;
         }
 
-
-        return _renderDOM(this);
+        return _renderDOM( this );
     }
 };
 
-/**
- * 浅copy
- * @returns {*|{}}
- */
 jDialog.extend = jDialog.fn.extend = function () {
 
-    var target = arguments[0] || {};
+    var target  = arguments[0] || {};
     var options = arguments[1] || {};
     var name;
     var copy;
 
-    if (arguments.length === 1) {
-        target = this;
+    if ( arguments.length === 1 ) {
+        target  = this;
         options = arguments[0];
     }
 
-    for (name in options) {
+    for ( name in options ) {
         copy = options[name];
-        if (copy !== undefined) {
+        if ( copy !== undefined ) {
             target[name] = copy;
         }
     }
@@ -83,10 +60,6 @@ jDialog.extend = jDialog.fn.extend = function () {
     return target;
 };
 
-/**
- *
- * @type {{constructor: Function, init: Function}|jDialog.fn|*}
- */
 jDialog.fn.init.prototype = jDialog.fn;
 
 /**
@@ -94,121 +67,96 @@ jDialog.fn.init.prototype = jDialog.fn;
  * @param jDialog
  * @private
  */
-function _renderDOM(jDialog) {
-    var self = jDialog;
+function _renderDOM( jDialog ) {
+    var self    = jDialog;
     var wrapper = self.getWrapper();
     var options = self.options;
 
-    wrapper
-        .appendChild(self.getHeader());
-    wrapper
-        .appendChild(self.getContainer());
-    wrapper
-        .appendChild(self.getFooter());
+    wrapper.appendChild( self.getHeader() );
+    wrapper.appendChild( self.getContainer() );
+    wrapper.appendChild( self.getFooter() );
 
+    self.title( options.title );
+    self.content( options.content );
+    self.top( '10%' );
 
-    if (options.title === '') {
-        self.hideHeader();
-    }
-
-    self.title(options.title);
-
-    //
-    self.content(options.content);
-
-    self.addButton('取消', 'destory', function () {
+    self.addButton( '取消', function () {
         self.remove();
-    });
+    } );
 
     //
-    if (options.modal) {
-        self.showModal();
-    }
-
-    if (options.autoHide) {
-        self.autoHide(options.autoHide);
+    if ( options.modal ) {
+        self.getModal();
     }
 
     //
-    if (options.callBack) {
-        self.addButton('确定', 'apply', options.callBack);
+    if ( options.fixed ) {
+        wrapper.style.position = 'fixed';
     }
 
-    wrapper.addEventListener('click', _eventRouter.bind(self), false);
-    wrapper.addEventListener('touchstart', _toggleClass, false);
-    wrapper.addEventListener('touchend', _toggleClass, false);
+    //
+    if ( options.autoHide ) {
+        self.autoHide( options.autoHide );
+    }
 
-    doc.body.appendChild(wrapper);
+    //
+    if ( options.callBack ) {
+        self.addButton( '确定', options.callBack );
+    }
 
-    self.verticalInViewPort(options.fixed)
-        .addClass('dialog-zoom-in');
+    wrapper.addEventListener( 'click', _eventRouter, false );
+    wrapper.addEventListener( 'touchstart', _toggleClass, false );
+    wrapper.addEventListener( 'touchend', _toggleClass, false );
+
+    doc.body.appendChild( wrapper );
+
+    setTimeout( function () {
+        self.addClass( 'dialog-zoom-in' );
+    }, 50 );
+
     return self;
 }
 
-/**
- *
- * @param tagName
- * @param attrs
- * @returns {HTMLElement}
- * @private
- */
-function _createElement(tagName, attrs) {
-    var element = doc.createElement(tagName);
-    jDialog.extend(element, attrs);
+function _createElement( tagName, attrs ) {
+    var element = doc.createElement( tagName );
+    jDialog.extend( element, attrs );
     return element;
 }
 
-/**
- *
- * @param event
- * @private
- */
-function _eventRouter(event) {
-    var target = event.target;
-    var actionName = target.getAttribute('data-dialog-action');
-    if (!actionName) {
+function _eventRouter( event ) {
+    var target     = event.target;
+    var actionName = target.getAttribute( 'data-dialog-action' );
+    if ( !actionName ) {
         return;
     }
-    jDialog.event.fire(actionName, target);
+    jDialog.event.fire( actionName, target );
 }
 
-/**
- *
- * @param event
- * @private
- */
-function _toggleClass(event) {
-    var target = event.target;
-    var actionName = target.getAttribute('data-dialog-action');
-    if (!actionName) {
+function _toggleClass( event ) {
+    var target     = event.target;
+    var actionName = target.getAttribute( 'data-dialog-action' );
+    if ( !actionName ) {
         return;
     }
-    target.classList.toggle('active');
+    target.classList.toggle( 'active' );
 }
 
-/**
- *
- * @param context
- * @returns {HTMLElement}
- * @private
- */
-function _createModal(context) {
-    var self = context;
-    var element = _createElement('div');
+function _createModal( context ) {
+    var element = _createElement( 'div' );
+
     element.style.cssText =
         ';background:rgba(0,0,0,0.3);width:100%;'
-        + 'position:absolute;left:0;top:0;'
-        + 'height:'
-        + Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight)
-        + 'px;z-index:'
-        + (self.currentDOMIndex - 1);
+        + 'position:fixed;left:0;top:0;'
+        + 'height:100%;z-index:'
+        + (context.currentDOMIndex - 1);
 
     element.onclick = function () {
-        if (!self.options.preventHide) {
-            jDialog.event.fire('destory');
+        if ( !context.options.preventHide ) {
+            context.remove();
         }
     };
 
-    return doc.body.appendChild(element)
+    return doc.body.appendChild( element );
 }
 
+win.jDialog = jDialog;
